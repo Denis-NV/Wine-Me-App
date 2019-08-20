@@ -167,6 +167,8 @@ exports.postWine = (req, res) => {
 
   let dict = {};
 
+  let newWine = {};
+
   db.collection("dictionary")
     .doc(defaultLangCode)
     .get()
@@ -208,7 +210,7 @@ exports.postWine = (req, res) => {
           Object.values(grapes)
         );
 
-        const newWine = {
+        newWine = {
           nativeLangCode,
           style, // {idRef : id, dicRef: id}
           name, // {idRef : id, dicRef: id}
@@ -237,7 +239,10 @@ exports.postWine = (req, res) => {
       }
     })
     .then(docRef => {
-      res.json({ Message: "New wine successfully added to DB", id: docRef.id });
+      newWine.wineId = docRef.id;
+
+      res.json(newWine);
+      // res.json({ Message: "New wine successfully added to DB", id: docRef.id });
     })
     .catch(err => {
       console.error(err);

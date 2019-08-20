@@ -5,13 +5,14 @@
     "serve": "firebase serve --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "firebase deploy --only functions,firestore",
     "logs": "firebase functions:log"
   },
   "engines": {
     "node": "8"
   },
   "dependencies": {
+    "algoliasearch": "^3.33.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "firebase": "^6.4.0",
