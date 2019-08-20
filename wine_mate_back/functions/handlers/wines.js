@@ -1,4 +1,11 @@
 const { db } = require("../util/admin");
+const algoliasearch = require("algoliasearch");
+const {
+  ALGOLIA_ID,
+  ALGOLIA_ADMIN_KEY,
+  ALGOLIA_SEARCH_KEY,
+  ALGOLIA_INDEX_NAME
+} = require("../util/algolia");
 
 const styles = {
   total: 0,
@@ -210,26 +217,28 @@ exports.postWine = (req, res) => {
           Object.values(grapes)
         );
 
+        const nowISOstr = new Date().toISOString();
+
         newWine = {
+          createdAt: nowISOstr,
+          updatedAt: nowISOstr,
           nativeLangCode,
           style, // {idRef : id, dicRef: id}
-          name, // {idRef : id, dicRef: id}
+          name, // {dicRef: id}
           region, // {idRef : id, dicRef: id}
           producer, // {idRef : id, dicRef: id}
           grapes, // {idRef1 : dicRef1, idRef2 : dicRef2}
-          searchStr: searchStr,
-          searchStrDefault: "",
-          searchStrNative: "",
-          images: [],
-          roles: {
-            userId_1: "owner",
-            userId_2: "editor",
-            userId_3: "editor"
-          }
+          searchStr: searchStr
+          // images: [],
+          // roles: {
+          //   userId_1: "owner",
+          //   userId_2: "editor",
+          //   userId_3: "editor"
+          // }
         };
 
-        res.json(newWine);
-        //return db.collection("wines").add(newWine);
+        //res.json(newWine);
+        return db.collection("wines").add(newWine);
       } else {
         console.error(`No native ${nativeLangCode} language document!`);
 
@@ -239,8 +248,8 @@ exports.postWine = (req, res) => {
       }
     })
     .then(docRef => {
-      //newWine.wineId = docRef.id;
-      //res.json(newWine);
+      newWine.wineId = docRef.id;
+      res.json(newWine);
       // res.json({ Message: "New wine successfully added to DB", id: docRef.id });
     })
     .catch(err => {
@@ -248,4 +257,46 @@ exports.postWine = (req, res) => {
 
       return res.status(500).json({ Error: "Something went wrong!!!" });
     });
+};
+
+exports.searchWine = (req, res) => {
+  //
+  const search_key = req.body.key;
+
+  const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
+
+  index.setSettings({
+    searchableAttributes: ["searchStr"]
+  });
+
+  // Perform an Algolia search:
+  index
+    .search({
+      query: search_key
+    })
+    .then(function(responses) {
+      res.json(responses.hits);
+    })
+    .catch(err => {
+      console.log(err);
+      res.json({ Error: err });
+    });
+};
+
+exports.deleteSearchObjects = (req, res) => {
+  //
+  const iDs = req.body.iDs;
+
+  const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
+
+  // Perform an Algolia search:
+  index.deleteObjects(iDs, (err, content) => {
+    if (err) throw err;
+
+    console.log(content);
+
+    res.json(content);
+  });
 };
