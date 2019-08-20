@@ -239,9 +239,8 @@ exports.postWine = (req, res) => {
       }
     })
     .then(docRef => {
-      newWine.wineId = docRef.id;
-
-      res.json(newWine);
+      //newWine.wineId = docRef.id;
+      //res.json(newWine);
       // res.json({ Message: "New wine successfully added to DB", id: docRef.id });
     })
     .catch(err => {
