@@ -21,10 +21,9 @@ class SearchView extends Component {
     // const { classes } = this.props;
 
     return (
-      <div className="topLevelPage" style={{ background: "#ce93d8" }}>
+      <div>
         <h2>Search</h2>
         <br />
-        {/* {P_TEN} */}
         <Link to="/search/wine">Found wine</Link>
       </div>
     );

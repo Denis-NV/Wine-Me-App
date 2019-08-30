@@ -21,11 +21,8 @@ import AccountBoxIco from "@material-ui/icons/AccountBox";
 const styles = theme => {
   return {
     ...theme.customStyles,
-    bottomNav: {
-      background: "rgb(70, 70, 70)",
-      position: "fixed",
-      width: "100%",
-      bottom: "0"
+    navContainer: {
+      background: "rgb(70, 70, 70)"
     },
     navButton: {
       color: "#FFFFFF"
@@ -46,36 +43,38 @@ class BottomNav extends Component {
     const value = location.pathname.split("/")[1];
 
     const menuMarkup = isTouchScreen ? (
-      <BottomNavigation
-        onChange={this.handleSelection}
-        className={classes.bottomNav}
-        value={value}
-      >
-        <BottomNavigationAction
-          label="Picker"
-          value=""
-          icon={<AssistantIco />}
-          className={classes.navButton}
-        />
-        <BottomNavigationAction
-          label="Wines"
-          value="wines"
-          icon={<ViewListIco />}
-          className={classes.navButton}
-        />
-        <BottomNavigationAction
-          label="Search"
-          value="search"
-          icon={<SearchIco />}
-          className={classes.navButton}
-        />
-        <BottomNavigationAction
-          label="Profile"
-          value="profile"
-          icon={<AccountBoxIco />}
-          className={classes.navButton}
-        />
-      </BottomNavigation>
+      <nav className="bottomNav">
+        <BottomNavigation
+          onChange={this.handleSelection}
+          className={classes.navContainer}
+          value={value}
+        >
+          <BottomNavigationAction
+            label="Picker"
+            value=""
+            icon={<AssistantIco />}
+            className={classes.navButton}
+          />
+          <BottomNavigationAction
+            label="Wines"
+            value="wines"
+            icon={<ViewListIco />}
+            className={classes.navButton}
+          />
+          <BottomNavigationAction
+            label="Search"
+            value="search"
+            icon={<SearchIco />}
+            className={classes.navButton}
+          />
+          <BottomNavigationAction
+            label="Profile"
+            value="profile"
+            icon={<AccountBoxIco />}
+            className={classes.navButton}
+          />
+        </BottomNavigation>
+      </nav>
     ) : null;
 
     return menuMarkup;

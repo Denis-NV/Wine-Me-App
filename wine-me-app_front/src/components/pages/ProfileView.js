@@ -21,7 +21,7 @@ class ProfileView extends Component {
     // const { classes } = this.props;
 
     return (
-      <div className="topLevelPage" style={{ background: "#90a4ae" }}>
+      <div>
         <h2>Profile</h2>
         <br />
         <Link to="/profile/wine">My saved wine</Link>

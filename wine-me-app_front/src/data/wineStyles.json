@@ -1,0 +1,42 @@
+{
+  "style1": {
+    "nameDicRef": "full_bodied_reds_name",
+    "descDicRef": "full_bodied_reds_desc",
+    "imageUrl": "/static/images/style1_main.jpg"
+  },
+  "style2": {
+    "nameDicRef": "full_bodied_reds_name",
+    "descDicRef": "full_bodied_reds_desc",
+    "imageUrl": "/static/images/style2_main.jpg"
+  },
+  "style3": {
+    "nameDicRef": "full_bodied_reds_name",
+    "descDicRef": "full_bodied_reds_desc",
+    "imageUrl": "/static/images/style3_main.jpg"
+  },
+  "style4": {
+    "nameDicRef": "full_bodied_reds_name",
+    "descDicRef": "full_bodied_reds_desc",
+    "imageUrl": "/static/images/style4_main.jpg"
+  },
+  "style5": {
+    "nameDicRef": "full_bodied_reds_name",
+    "descDicRef": "full_bodied_reds_desc",
+    "imageUrl": "/static/images/style5_main.jpg"
+  },
+  "style6": {
+    "nameDicRef": "full_bodied_reds_name",
+    "descDicRef": "full_bodied_reds_desc",
+    "imageUrl": "/static/images/style6_main.jpg"
+  },
+  "style7": {
+    "nameDicRef": "full_bodied_reds_name",
+    "descDicRef": "full_bodied_reds_desc",
+    "imageUrl": "/static/images/style7_main.jpg"
+  },
+  "style8": {
+    "nameDicRef": "full_bodied_reds_name",
+    "descDicRef": "full_bodied_reds_desc",
+    "imageUrl": "/static/images/style8_main.jpg"
+  }
+}

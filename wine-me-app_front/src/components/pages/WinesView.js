@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 // Components
-// import { P_TEN } from "../../util/LorenIpsum";
+import { P_TEN } from "../../util/LorenIpsum";
 
 // IMPORTS END
 
@@ -22,11 +22,13 @@ class WinesView extends Component {
     // const { classes } = this.props;
 
     return (
-      <div className="topLevelPage" style={{ background: "#f06292" }}>
+      <div>
         <h2>Wines</h2>
         <br />
-        {/* {P_TEN} */}
         <Link to="/wines/wine">Selected wine</Link>
+        <br />
+        <br />
+        {P_TEN}
       </div>
     );
   }

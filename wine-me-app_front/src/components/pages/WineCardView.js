@@ -20,7 +20,7 @@ class WineCardView extends Component {
     // const { classes } = this.props;
 
     return (
-      <div className="topLevelPage" style={{ background: "#dce775" }}>
+      <div>
         <h2>Wines Card</h2>
         <br />
         {/* {P_TEN} */}
