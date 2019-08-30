@@ -1,25 +1,61 @@
 #root {
   background: #cfe8fc;
-  overflow: hidden;
+  /* overflow: hidden; */
   max-width: 960px;
   margin: auto;
   min-height: 100vh;
 }
 
 .mainHeader {
+  z-index: 2;
   position: fixed;
-  z-index: 1;
-  height: 5vh;
+  height: 35px;
   top: 0;
   width: 100%;
   max-width: 960px;
-  background: #d1c4e9;
+  background: #546e7a;
+  color: white;
+}
+
+.mainContent {
+  z-index: 1;
+  position: relative;
+  top: 35px;
+  width: 100%;
+  background-color: chocolate;
 }
 
 .topLevelPage {
-  position: relative;
-  padding-top: 5vh;
-  padding-bottom: 8vh;
+  position: absolute;
+  top: 0;
+  min-height: calc(100vh - 35px);
   width: 100%;
-  min-height: 95vh;
+}
+
+@media (hover: none) {
+  .topLevelPage {
+    padding-bottom: 65px;
+  }
+}
+
+.bottomNav {
+  z-index: 3;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+.pages-enter {
+  opacity: 0;
+  z-index: 1;
+}
+
+.pages-enter.pages-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease-in;
+}
+
+.pages-exit.pages-exit-active {
+  opacity: 0;
+  transition: opacity 250ms ease-in;
 }
