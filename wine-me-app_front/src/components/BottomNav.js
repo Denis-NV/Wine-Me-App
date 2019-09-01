@@ -87,7 +87,9 @@ BottomNav.propTypes = {
 };
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    isTouchScreen: state.UI.isTouchScreen
+  };
 };
 
 const mapActionsToProps = {};
