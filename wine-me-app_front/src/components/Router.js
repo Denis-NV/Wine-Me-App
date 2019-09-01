@@ -2,9 +2,6 @@ import React, { Fragment } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-// MUI
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-
 // Components
 import AppHeader from "./AppHeader";
 import BottomNav from "./BottomNav";
@@ -17,14 +14,12 @@ import WineCardView from "./pages/WineCardView";
 // IMPORTS END
 
 function Router() {
-  const isTouchScreen = useMediaQuery("(hover: none)");
-
   return (
     <BrowserRouter>
       <Route
         render={({ location }) => (
           <Fragment>
-            <AppHeader isTouchScreen={isTouchScreen} />
+            <AppHeader />
             <TransitionGroup className="mainContent">
               <CSSTransition
                 key={location.key}
@@ -119,7 +114,7 @@ function Router() {
                 </Switch>
               </CSSTransition>
             </TransitionGroup>
-            <BottomNav isTouchScreen={isTouchScreen} />
+            <BottomNav />
           </Fragment>
         )}
       />
