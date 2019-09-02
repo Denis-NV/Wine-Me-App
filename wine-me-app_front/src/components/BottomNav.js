@@ -20,58 +20,42 @@ import AccountBoxIco from "@material-ui/icons/AccountBox";
 
 const styles = theme => {
   return {
-    ...theme.customStyles,
-    navContainer: {
-      background: "rgb(70, 70, 70)"
-    },
-    navButton: {
-      color: "#FFFFFF"
-    }
+    ...theme.customStyles
   };
 };
 
 class BottomNav extends Component {
   handleSelection = (event, newValue) => {
-    // console.log(newValue);
-
     this.props.history.push(`/${newValue}`);
   };
 
   render() {
-    const { isTouchScreen, classes, location } = this.props;
+    const { isTouchScreen, location } = this.props;
 
     const value = location.pathname.split("/")[1];
 
     const menuMarkup = isTouchScreen ? (
       <nav className="bottomNav">
-        <BottomNavigation
-          onChange={this.handleSelection}
-          className={classes.navContainer}
-          value={value}
-        >
+        <BottomNavigation onChange={this.handleSelection} value={value}>
           <BottomNavigationAction
             label="Picker"
             value=""
             icon={<AssistantIco />}
-            className={classes.navButton}
           />
           <BottomNavigationAction
             label="Wines"
             value="wines"
             icon={<ViewListIco />}
-            className={classes.navButton}
           />
           <BottomNavigationAction
             label="Search"
             value="search"
             icon={<SearchIco />}
-            className={classes.navButton}
           />
           <BottomNavigationAction
             label="Profile"
             value="profile"
             icon={<AccountBoxIco />}
-            className={classes.navButton}
           />
         </BottomNavigation>
       </nav>

@@ -25,26 +25,23 @@ import stylesData from "../../../data/wineStyles";
 // TODO 1. wire style focus via redux state
 // TODO: 2. load dictionary during intial app load
 // TODO 3. tidy up card width and height calculations
-// TODO: 4. sitch from CSS to Sass
-// TODO: 5. make a nice header with nav
+// TODO 4. sitch from CSS to Sass
+// TODO 5. make a nice header with nav
 // TODO: 6. tidy up card image loading / resizing
-// TODO: 7. Decide on the color scheme
+// TODO 7. Decide on the color scheme
 
 const useStyles = makeStyles(theme => ({
   ...theme.customStyles,
   cardAction: props => ({
     height: theme.breakpoints.values[props.maxBreakpoint] / 2.8,
-    backgroundColor: "rgba(188, 170, 164, 1)"
+    backgroundColor: theme.customValues.overlayColorSolid
   }),
   cardImage: {
     height: "100%"
-    // position: "absolute",
-    // top: 0,
-    // minHeight: "100%"
   },
   cardText: {
     textAlign: "center",
-    backgroundColor: "rgba(188, 170, 164, 0.7)",
+    backgroundColor: theme.customValues.overlayColorOpacity,
     position: "absolute",
     bottom: 0,
     width: "100%"

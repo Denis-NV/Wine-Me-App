@@ -1,6 +1,10 @@
+@import "_config.scss";
+@import "Reset.scss";
+@import "Typography.scss";
+
 #root {
-  background: #cfe8fc;
-  max-width: 960px;
+  background: #a76b6b;
+  max-width: $maxWebWidth;
   margin: auto;
   min-height: 100vh;
 }
@@ -8,32 +12,39 @@
 .mainHeader {
   z-index: 2;
   position: fixed;
-  height: 35px;
+  height: $headerHeightWeb;
   top: 0;
   width: 100%;
-  max-width: 960px;
-  background: #546e7a;
+  max-width: $maxWebWidth;
   color: white;
+
+  @media (hover: none) {
+    height: $headerHeightSmart;
+    header {
+      height: $headerHeightSmart;
+    }
+  }
 }
 
 .mainContent {
   z-index: 1;
   position: relative;
-  top: 35px;
+  top: $headerHeightWeb;
   width: 100%;
   background-color: chocolate;
+  @media (hover: none) {
+    top: $headerHeightSmart;
+  }
 }
 
 .topLevelPage {
   position: absolute;
   top: 0;
-  min-height: calc(100vh - 35px);
+  min-height: calc(100vh - #{$headerHeightWeb});
   width: 100%;
-}
-
-@media (hover: none) {
-  .topLevelPage {
-    padding-bottom: 65px;
+  @media (hover: none) {
+    min-height: calc(100vh - #{$headerHeightSmart});
+    padding-bottom: $bottomNavHeight;
   }
 }
 
@@ -43,6 +54,8 @@
   width: 100%;
   bottom: 0;
 }
+
+// Animations
 
 .pages-enter {
   opacity: 0;
