@@ -31,10 +31,7 @@ function Router() {
                     exact
                     path="/"
                     render={({ ...rest }) => (
-                      <div
-                        className="topLevelPage pickerPage"
-                        style={{ background: "#e57373" }}
-                      >
+                      <div className="topLevelPage pickerPage">
                         <PickerView {...rest} />
                       </div>
                     )}
@@ -43,10 +40,7 @@ function Router() {
                     exact
                     path="/wines"
                     render={({ ...rest }) => (
-                      <div
-                        className="topLevelPage winesPage"
-                        style={{ background: "#f06292" }}
-                      >
+                      <div className="topLevelPage winesPage">
                         <WinesView {...rest} />
                       </div>
                     )}
@@ -55,10 +49,7 @@ function Router() {
                     exact
                     path="/wines/wine"
                     render={({ ...rest }) => (
-                      <div
-                        className="topLevelPage wineCardPage"
-                        style={{ background: "#dce775" }}
-                      >
+                      <div className="topLevelPage wineCardPage">
                         <WineCardView {...rest} />
                       </div>
                     )}
@@ -67,10 +58,7 @@ function Router() {
                     exact
                     path="/search"
                     render={({ ...rest }) => (
-                      <div
-                        className="topLevelPage searchPage"
-                        style={{ background: "#ce93d8" }}
-                      >
+                      <div className="topLevelPage searchPage">
                         <SearchView {...rest} />
                       </div>
                     )}
@@ -79,10 +67,7 @@ function Router() {
                     exact
                     path="/search/wine"
                     render={({ ...rest }) => (
-                      <div
-                        className="topLevelPage wineCardPage"
-                        style={{ background: "#dce775" }}
-                      >
+                      <div className="topLevelPage wineCardPage">
                         <WineCardView {...rest} />
                       </div>
                     )}
@@ -91,10 +76,7 @@ function Router() {
                     exact
                     path="/profile"
                     render={({ ...rest }) => (
-                      <div
-                        className="topLevelPage profilePage"
-                        style={{ background: "#90a4ae" }}
-                      >
+                      <div className="topLevelPage profilePage">
                         <ProfileView {...rest} />
                       </div>
                     )}
@@ -103,10 +85,7 @@ function Router() {
                     exact
                     path="/profile/wine"
                     render={({ ...rest }) => (
-                      <div
-                        className="topLevelPage wineCardPage"
-                        style={{ background: "#dce775" }}
-                      >
+                      <div className="topLevelPage wineCardPage">
                         <WineCardView {...rest} />
                       </div>
                     )}

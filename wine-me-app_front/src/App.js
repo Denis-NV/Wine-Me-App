@@ -18,10 +18,7 @@ import Router from "./components/Router";
 import themeObj from "./util/theme";
 
 // CSS
-import "./css/Reset.css";
-// import "./css/Reset.mild.css";
-import "./css/Typography.css";
-import "./css/App.css";
+import "./css/App.scss";
 
 // IMPORTS END
 
