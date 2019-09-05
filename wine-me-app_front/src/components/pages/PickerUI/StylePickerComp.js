@@ -98,9 +98,10 @@ const StylePickerComp = props => {
 
   // eslint-disable-next-line
   for (const style in stylesData) {
+    const { dict } = props.UI;
     const styleObj = stylesData[style];
-    const nameStr = styleObj.nameDicRef;
-    const descStr = styleObj.descDicRef;
+    const nameStr = dict[styleObj.nameDicRef];
+    const descStr = dict[styleObj.descDicRef];
 
     // Card Markup
     const cardMarkup = (

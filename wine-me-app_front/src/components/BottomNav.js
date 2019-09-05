@@ -30,7 +30,10 @@ class BottomNav extends Component {
   };
 
   render() {
-    const { isTouchScreen, location } = this.props;
+    const {
+      location,
+      UI: { isTouchScreen, dict }
+    } = this.props;
 
     const value = location.pathname.split("/")[1];
 
@@ -38,22 +41,22 @@ class BottomNav extends Component {
       <nav className="bottomNav">
         <BottomNavigation onChange={this.handleSelection} value={value}>
           <BottomNavigationAction
-            label="Picker"
+            label={dict["nav_picker"]}
             value=""
             icon={<AssistantIco />}
           />
           <BottomNavigationAction
-            label="Wines"
+            label={dict["nav_wines"]}
             value="wines"
             icon={<ViewListIco />}
           />
           <BottomNavigationAction
-            label="Search"
+            label={dict["nav_search"]}
             value="search"
             icon={<SearchIco />}
           />
           <BottomNavigationAction
-            label="Profile"
+            label={dict["nav_profile"]}
             value="profile"
             icon={<AccountBoxIco />}
           />
@@ -67,12 +70,12 @@ class BottomNav extends Component {
 
 BottomNav.propTypes = {
   classes: PropTypes.object.isRequired,
-  isTouchScreen: PropTypes.bool.isRequired
+  UI: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
   return {
-    isTouchScreen: state.UI.isTouchScreen
+    UI: state.UI
   };
 };
 

@@ -27,6 +27,11 @@ const {
   deleteSearchObjects
 } = require("./handlers/wines");
 
+const { getDictionary } = require("./handlers/ui");
+
+// UI routes
+app.get("/dict/:lang", getDictionary);
+
 // wine routes
 app.post("/region", postNewRegion);
 app.post("/wine", postWine);

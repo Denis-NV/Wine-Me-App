@@ -2,15 +2,20 @@ import {
   SET_ERRORS,
   CLEAR_ERRORS,
   SET_DEVICE_FLAGS,
+  SET_INIT_DATA,
   SET_WINE_STYLE_FOCUS
 } from "../actions/actionsUI";
 
 const initialState = {
+  initDataLoaded: false,
   loading: false,
   isTouchScreen: false,
   isSmartphone: false,
   focusedWineStyle: 0,
-  maxBreakpoint: "md"
+  maxBreakpoint: "md",
+  defaultLang: "en",
+  currentLang: "en",
+  dict: {}
 };
 
 export default function(state = initialState, action) {
@@ -19,6 +24,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         ...action.payload
+      };
+    case SET_INIT_DATA:
+      return {
+        ...state,
+        dict: action.payload,
+        initDataLoaded: true
       };
     case SET_WINE_STYLE_FOCUS:
       return {

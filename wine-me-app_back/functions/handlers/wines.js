@@ -1,4 +1,4 @@
-const { db } = require("../util/admin");
+const { db, defaultLangCode } = require("../util/admin");
 const algoliasearch = require("algoliasearch");
 const {
   ALGOLIA_ID,
@@ -24,8 +24,6 @@ const styles = {
   style7: 0,
   style7Percent: 0
 };
-
-const defaultLangCode = "en";
 
 exports.postNewRegion = (req, res) => {
   const nowISOstr = new Date().toISOString();

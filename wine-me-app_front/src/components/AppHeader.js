@@ -44,7 +44,11 @@ class AppHeader extends Component {
   };
 
   render() {
-    const { isTouchScreen, classes, location } = this.props;
+    const {
+      classes,
+      location,
+      UI: { isTouchScreen, dict }
+    } = this.props;
 
     const value = location.pathname.split("/")[1];
 
@@ -55,10 +59,14 @@ class AppHeader extends Component {
         aria-label="Wine Me App Header Nav"
         variant="fullWidth"
       >
-        <Tab icon={<AssistantIco />} label="Picker" value="" />
-        <Tab icon={<ViewListIco />} label="Wines" value="wines" />
-        <Tab icon={<SearchIco />} label="Search" value="search" />
-        <Tab icon={<AccountBoxIco />} label="Profile" value="profile" />
+        <Tab icon={<AssistantIco />} label={dict["nav_picker"]} value="" />
+        <Tab icon={<ViewListIco />} label={dict["nav_wines"]} value="wines" />
+        <Tab icon={<SearchIco />} label={dict["nav_search"]} value="search" />
+        <Tab
+          icon={<AccountBoxIco />}
+          label={dict["nav_profile"]}
+          value="profile"
+        />
       </Tabs>
     );
 
@@ -81,11 +89,11 @@ class AppHeader extends Component {
 
 AppHeader.propTypes = {
   classes: PropTypes.object.isRequired,
-  isTouchScreen: PropTypes.bool.isRequired
+  UI: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
-  return { isTouchScreen: state.UI.isTouchScreen };
+  return { UI: state.UI };
 };
 
 const mapActionsToProps = {};
