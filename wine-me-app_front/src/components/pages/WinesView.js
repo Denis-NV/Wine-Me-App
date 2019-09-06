@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
@@ -22,14 +22,14 @@ class WinesView extends Component {
     // const { classes } = this.props;
 
     return (
-      <div>
+      <Fragment>
         <h2>Wines</h2>
         <br />
         <Link to="/wines/wine">Selected wine</Link>
         <br />
         <br />
         {P_TEN}
-      </div>
+      </Fragment>
     );
   }
 }

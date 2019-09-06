@@ -5,6 +5,7 @@ import Swipe from "react-easy-swipe";
 // Redux
 import { connect } from "react-redux";
 import { setWineStyleFocus } from "../../../redux/actions/actionsUI";
+import { setWineStyle } from "../../../redux/actions/actionsPicker";
 
 // MUI
 import { makeStyles } from "@material-ui/styles";
@@ -18,17 +19,7 @@ import Typography from "@material-ui/core/Typography";
 
 // Components
 
-// Data
-import stylesData from "../../../data/wineStyles";
-
 // IMPORTS END
-// TODO 1. wire style focus via redux state
-// TODO: 2. load dictionary during intial app load
-// TODO 3. tidy up card width and height calculations
-// TODO 4. sitch from CSS to Sass
-// TODO 5. make a nice header with nav
-// TODO: 6. tidy up card image loading / resizing
-// TODO 7. Decide on the color scheme
 
 const useStyles = makeStyles(theme => ({
   ...theme.customStyles,
@@ -58,13 +49,21 @@ const useStyles = makeStyles(theme => ({
   carouselCardAction: props => ({
     height: props.cardHeight,
     width: props.cardWidth
+  }),
+  cardClickArea: props => ({
+    // background: "#000",
+    height: props.cardHeight,
+    width: props.cardWidth,
+    position: "absolute",
+    zIndex: "1"
   })
 }));
 
 const StylePickerComp = props => {
   const {
     setWineStyleFocus,
-    UI: { isSmartphone, focusedWineStyle }
+    UI: { isSmartphone, focusedWineStyle },
+    picker: { wineStyles }
   } = props;
 
   // Positioning
@@ -79,10 +78,10 @@ const StylePickerComp = props => {
   });
 
   // Event Handlers
-
+  // TODO: Try react-swipeable-views
   const onSwipeLeft = () => {
     const newIndex = Math.min(
-      Object.keys(stylesData).length - 1,
+      Object.keys(wineStyles).length - 1,
       focusedWineStyle + 1
     );
     setWineStyleFocus(newIndex);
@@ -93,17 +92,22 @@ const StylePickerComp = props => {
     setWineStyleFocus(newIndex);
   };
 
+  const handleCardClick = event => {
+    props.setWineStyle(event.target.id);
+  };
+
   // Markup
   const cards = [];
 
   // eslint-disable-next-line
-  for (const style in stylesData) {
+  for (const style in wineStyles) {
     const { dict } = props.UI;
-    const styleObj = stylesData[style];
+    const styleObj = wineStyles[style];
     const nameStr = dict[styleObj.nameDicRef];
     const descStr = dict[styleObj.descDicRef];
 
     // Card Markup
+    // TODO: tidy up card image loading / resizing
     const cardMarkup = (
       <Grid item key={style} sx={12} sm={6} md={3}>
         <Card>
@@ -111,7 +115,12 @@ const StylePickerComp = props => {
             className={
               isSmartphone ? classes.carouselCardAction : classes.cardAction
             }
+            onClick={handleCardClick}
           >
+            <CardContent
+              className={classes.cardClickArea}
+              id={style}
+            ></CardContent>
             <CardMedia
               component="img"
               alt={nameStr}
@@ -169,14 +178,18 @@ StylePickerComp.propTypes = {
   picker: PropTypes.object.isRequired,
   UI: PropTypes.object.isRequired,
   setWineStyleFocus: PropTypes.func.isRequired,
-  paddingFactor: PropTypes.number.isRequired
+  paddingFactor: PropTypes.number.isRequired,
+  setWineStyle: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
   return { picker: state.picker, UI: state.UI };
 };
 
-const mapActionsToProps = { setWineStyleFocus };
+const mapActionsToProps = {
+  setWineStyleFocus,
+  setWineStyle
+};
 
 export default connect(
   mapStateToProps,
