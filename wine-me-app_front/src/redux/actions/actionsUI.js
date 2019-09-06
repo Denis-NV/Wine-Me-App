@@ -1,4 +1,5 @@
-import axios from "axios";
+// import axios from "axios";
+import dict from "../../data/dictionary";
 
 export const SET_ERRORS = "SET_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
@@ -16,15 +17,16 @@ export const setTouchScreenFlag = (isTouchScreen, isSmartphone) => dispatch => {
 
 export const loadGlobalDictionary = lang => dispatch => {
   //
-  axios
-    .get(`/dict/${lang}`)
-    .then(res => {
-      // console.log(res.data);
-      dispatch({ type: SET_INIT_DATA, payload: res.data });
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  // axios
+  //   .get(`/dict/${lang}`)
+  //   .then(res => {
+  //     // console.log(res.data);
+  //     dispatch({ type: SET_INIT_DATA, payload: res.data });
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
+  dispatch({ type: SET_INIT_DATA, payload: dict });
 };
 
 export const setWineStyleFocus = index => dispatch => {

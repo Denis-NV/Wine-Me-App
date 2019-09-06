@@ -6,10 +6,11 @@ import { connect } from "react-redux";
 
 // MUI
 import withStyles from "@material-ui/core/styles/withStyles";
-import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
 
 // Components
 import StylePickerComp from "./PickerUI/StylePickerComp";
+import StyleBrowser from "./PickerUI/StyleBrowser";
 
 // IMPORTS END
 
@@ -17,21 +18,24 @@ const paddingFactor = 2;
 
 const styles = theme => {
   return {
-    ...theme.customStyles,
-    mainContainer: {
-      padding: `${theme.spacing() * paddingFactor}px`
-    }
+    ...theme.customStyles
   };
 };
 
 class PickerView extends Component {
   render() {
-    const { classes } = this.props;
+    const {
+      picker: { selectedStyle }
+    } = this.props;
 
     return (
-      <Container className={classes.mainContainer}>
-        <StylePickerComp paddingFactor={paddingFactor} />
-      </Container>
+      <Box p={paddingFactor}>
+        {selectedStyle === "" ? (
+          <StylePickerComp paddingFactor={paddingFactor} />
+        ) : (
+          <StyleBrowser />
+        )}
+      </Box>
     );
   }
 }

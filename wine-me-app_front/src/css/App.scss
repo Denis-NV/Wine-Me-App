@@ -1,9 +1,8 @@
 @import "_config.scss";
-@import "Reset.scss";
-@import "Typography.scss";
+// @import "Reset.scss";
+// @import "Typography.scss";
 
 #root {
-  background: #a76b6b;
   max-width: $maxWebWidth;
   margin: auto;
   min-height: 100vh;
@@ -12,6 +11,8 @@
 .mainHeader {
   z-index: 2;
   position: fixed;
+  padding: 0;
+  margin: 0;
   height: $headerHeightWeb;
   top: 0;
   width: 100%;
@@ -29,22 +30,32 @@
 .mainContent {
   z-index: 1;
   position: relative;
-  top: $headerHeightWeb;
+  padding-top: $headerHeightWeb;
   width: 100%;
-  background-color: chocolate;
+  background: #a76b6b;
   @media (hover: none) {
-    top: $headerHeightSmart;
+    padding-top: $headerHeightSmart;
+  }
+}
+
+.mainContent:after {
+  clear: both;
+  content: "";
+  display: block;
+  min-height: calc(100vh - #{$headerHeightWeb});
+  @media (hover: none) {
+    min-height: calc(100vh - #{$headerHeightSmart});
   }
 }
 
 .topLevelPage {
   position: absolute;
-  top: 0;
-  min-height: calc(100vh - #{$headerHeightWeb});
+  background: #a76b6b;
+  top: $headerHeightWeb;
   width: 100%;
   @media (hover: none) {
-    min-height: calc(100vh - #{$headerHeightSmart});
     padding-bottom: $bottomNavHeight;
+    top: $headerHeightSmart;
   }
 }
 

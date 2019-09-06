@@ -20,12 +20,17 @@ import AccountBoxIco from "@material-ui/icons/AccountBox";
 const styles = theme => {
   return {
     ...theme.customStyles,
-    appBar: { flexDirection: "row" },
+    appBar: {
+      flexDirection: "row",
+      maxHeight: 72
+    },
     logoCont: {
       margin: "auto",
       padding: "0px 20px 0 20px",
       "& img": {
-        objectFit: "cover"
+        objectFit: "cover",
+        padding: "0",
+        margin: "0"
       },
       "@media (max-width: 600px)": {
         padding: 0,
