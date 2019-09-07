@@ -5,7 +5,7 @@ import stylesData from "../../data/wineStyles";
 
 const initialState = {
   loadingRegions: false,
-  selectedStyle: "",
+  selectedStyle: "style1",
   wineStyles: stylesData
 };
 

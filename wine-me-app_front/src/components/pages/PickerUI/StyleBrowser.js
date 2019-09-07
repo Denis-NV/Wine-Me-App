@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/styles";
 import { useTheme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
 import Input from "@material-ui/core/Input";
@@ -21,15 +22,14 @@ import Select from "@material-ui/core/Select";
 
 // IMPORTS END
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
+const MenuProps = heigth => {
+  return {
+    PaperProps: {
+      style: {
+        maxHeight: heigth
+      }
     }
-  }
+  };
 };
 
 const names = [
@@ -45,20 +45,23 @@ const names = [
   "Kelly Snyder"
 ];
 
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium
-  };
-}
-
 const useStyles = makeStyles(theme => ({
   ...theme.customStyles,
-  style1: props => ({
-    backaground: props.color
-  })
+  menuItem: props => ({
+    style1: props
+  }),
+  formControl: {
+    minWidth: 120,
+    width: "100%",
+    marginTop: theme.spacing(3)
+  },
+  chips: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  chip: {
+    margin: 2
+  }
 }));
 
 const StyleBrowser = props => {
@@ -82,45 +85,51 @@ const StyleBrowser = props => {
   const smartphoneMarkup = <Fragment>Smartphone</Fragment>;
   const webMarkup = (
     <Grid container>
-      <Grid item>
-        <Typography variant="h5">
-          {dict[selectedStyleData["nameDicRef"]]}
-        </Typography>
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="select-multiple-chip">
-            Select Countries
-          </InputLabel>
-          <Select
-            multiple
-            value={personName}
-            onChange={handleChange}
-            input={<Input id="select-multiple-chip" />}
-            renderValue={selected => (
-              <div className={classes.chips}>
-                {selected.map(value => (
-                  <Chip key={value} label={value} className={classes.chip} />
-                ))}
-              </div>
-            )}
-            MenuProps={MenuProps}
-          >
-            {names.map(name => (
-              <MenuItem
-                key={name}
-                value={name}
-                style={getStyles(name, personName, theme)}
-              >
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+      <Grid item xs={12} sm={4}>
+        <Box
+          bgcolor={theme.customValues.overlayColorSolid}
+          px={2}
+          py={3}
+          boxShadow={1}
+        >
+          <Typography variant="h5">
+            {dict[selectedStyleData["nameDicRef"]]}
+          </Typography>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="select-multiple-chip">
+              {dict["select_countries"]}
+            </InputLabel>
+            <Select
+              multiple
+              value={personName}
+              onChange={handleChange}
+              input={<Input id="select-multiple-chip" />}
+              renderValue={selected => (
+                <div className={classes.chips}>
+                  {selected.map(value => (
+                    <Chip key={value} label={value} className={classes.chip} />
+                  ))}
+                </div>
+              )}
+              MenuProps={MenuProps(window.innerHeight - 200)}
+            >
+              {names.map(name => (
+                <MenuItem key={name} value={name}>
+                  {name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
       </Grid>
-      <Grid item></Grid>
+      <Grid item xs={12} sm={8}>
+        <Box p={2}>Browser</Box>
+      </Grid>
     </Grid>
   );
 
-  return isSmartphone ? smartphoneMarkup : webMarkup;
+  return webMarkup;
+  // return isSmartphone ? smartphoneMarkup : webMarkup;
 };
 
 StyleBrowser.propTypes = {
