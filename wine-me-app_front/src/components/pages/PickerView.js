@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 
 // Redux
@@ -29,13 +29,15 @@ class PickerView extends Component {
     } = this.props;
 
     return (
-      <Box p={paddingFactor}>
+      <Fragment>
         {selectedStyle === "" ? (
-          <StylePickerComp paddingFactor={paddingFactor} />
+          <Box p={paddingFactor}>
+            <StylePickerComp paddingFactor={paddingFactor} />{" "}
+          </Box>
         ) : (
           <StyleBrowser />
         )}
-      </Box>
+      </Fragment>
     );
   }
 }

@@ -22,19 +22,26 @@ const styles = {
   style6: 0,
   style6Percent: 0,
   style7: 0,
-  style7Percent: 0
+  style7Percent: 0,
+  style8: 0,
+  style8Percent: 0
+};
+
+exports.getExistingCountries = (req, res) => {
+  // db.collection("countries")
 };
 
 exports.postNewRegion = (req, res) => {
   const nowISOstr = new Date().toISOString();
   //
   const newRegion = {
-    name: req.body.name,
-    country: req.body.country,
+    dictionary: req.body.dictionary ? req.body.dictionary : {},
+    countryRef: req.body.countryRef,
+    countryDicRef: req.body.countryDicRef,
     createdAt: nowISOstr,
     updatedAt: nowISOstr,
-    grapes: [],
-    producers: [],
+    grapesRefs: [],
+    producersRefs: [],
     ...styles
   };
 
@@ -49,6 +56,27 @@ exports.postNewRegion = (req, res) => {
     .catch(err => {
       res.status(500).json({ Error: "Something went wrong!!!" });
       console.error(err);
+    });
+};
+
+exports.deleteRegion = (req, res) => {
+  const documnet = db.doc(`/regions/${req.params.regionId}`);
+  //
+  documnet
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: "Region not found" });
+      } else {
+        return documnet.delete();
+      }
+    })
+    .then(() => {
+      res.json({ message: "Region successfully deleted" });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({ error: err.code });
     });
 };
 
