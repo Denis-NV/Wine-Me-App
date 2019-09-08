@@ -12,6 +12,9 @@ import Box from "@material-ui/core/Box";
 import StylePickerComp from "./PickerUI/StylePickerComp";
 import StyleBrowser from "./PickerUI/StyleBrowser";
 
+// Utils
+import WithLoader from "../util/WithLoader";
+
 // IMPORTS END
 
 const paddingFactor = 2;
@@ -25,7 +28,7 @@ const styles = theme => {
 class PickerView extends Component {
   render() {
     const {
-      picker: { selectedStyle }
+      picker: { countriesLoaded, selectedStyle }
     } = this.props;
 
     return (
@@ -35,7 +38,7 @@ class PickerView extends Component {
             <StylePickerComp paddingFactor={paddingFactor} />{" "}
           </Box>
         ) : (
-          <StyleBrowser />
+          <WithLoader isLoaded={countriesLoaded} component={StyleBrowser} />
         )}
       </Fragment>
     );

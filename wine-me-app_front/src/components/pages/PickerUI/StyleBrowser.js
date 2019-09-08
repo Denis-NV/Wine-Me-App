@@ -1,8 +1,9 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 // Redux
 import { connect } from "react-redux";
+import { setSelectedWineCountries } from "../../../redux/actions/actionsPicker";
 
 // MUI
 import { makeStyles } from "@material-ui/styles";
@@ -32,19 +33,6 @@ const MenuProps = heigth => {
   };
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder"
-];
-
 const useStyles = makeStyles(theme => ({
   ...theme.customStyles,
   menuItem: props => ({
@@ -68,21 +56,30 @@ const StyleBrowser = props => {
   const classes = useStyles({});
   const theme = useTheme();
 
-  const [personName, setPersonName] = React.useState([]);
-
   const {
-    UI: { isSmartphone, dict },
-    picker: { selectedStyle, wineStyles }
+    setSelectedWineCountries,
+    // UI: { isSmartphone, dict },
+    UI: { dict },
+    picker: { selectedStyle, wineStyles, wineCountries, selectedCountries }
   } = props;
 
   const selectedStyleData = wineStyles[selectedStyle];
+  const wineCountriesData = {};
+
+  wineCountries.map(
+    country =>
+      (wineCountriesData[country.code] = {
+        ...country,
+        name: dict[country.dicRef]
+      })
+  );
 
   // Handlers
   const handleChange = event => {
-    setPersonName(event.target.value);
+    setSelectedWineCountries(event.target.value);
   };
 
-  const smartphoneMarkup = <Fragment>Smartphone</Fragment>;
+  // const smartphoneMarkup = <Fragment>Smartphone</Fragment>;
   const webMarkup = (
     <Grid container>
       <Grid item xs={12} sm={4}>
@@ -101,21 +98,25 @@ const StyleBrowser = props => {
             </InputLabel>
             <Select
               multiple
-              value={personName}
+              value={selectedCountries}
               onChange={handleChange}
               input={<Input id="select-multiple-chip" />}
               renderValue={selected => (
                 <div className={classes.chips}>
                   {selected.map(value => (
-                    <Chip key={value} label={value} className={classes.chip} />
+                    <Chip
+                      key={value}
+                      label={wineCountriesData[value].name}
+                      className={classes.chip}
+                    />
                   ))}
                 </div>
               )}
               MenuProps={MenuProps(window.innerHeight - 200)}
             >
-              {names.map(name => (
-                <MenuItem key={name} value={name}>
-                  {name}
+              {wineCountries.map(country => (
+                <MenuItem key={country.code} value={country.code}>
+                  {wineCountriesData[country.code].name}
                 </MenuItem>
               ))}
             </Select>
@@ -134,7 +135,8 @@ const StyleBrowser = props => {
 
 StyleBrowser.propTypes = {
   UI: PropTypes.object.isRequired,
-  picker: PropTypes.object.isRequired
+  picker: PropTypes.object.isRequired,
+  setSelectedWineCountries: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -144,7 +146,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapActionsToProps = {};
+const mapActionsToProps = { setSelectedWineCountries };
 
 export default connect(
   mapStateToProps,

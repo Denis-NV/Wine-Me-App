@@ -1,0 +1,17 @@
+[
+  {
+    "code": "fr",
+    "dicRef": "france",
+    "regionsRefs": [
+      "FLG69WyW0ehbK59AMO0P",
+      "PEbdhYSNq58NIUVhuU5O",
+      "kKnF8PxNrrG1JMkEahvf",
+      "N4RHhfEM1ujhdEx477zs"
+    ]
+  },
+  {
+    "code": "pt",
+    "dicRef": "portugal",
+    "regionsRefs": ["0XhTBqkZHq1mIu19JkT8"]
+  }
+]
