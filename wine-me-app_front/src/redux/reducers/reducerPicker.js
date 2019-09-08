@@ -1,12 +1,19 @@
-import { LOADING_REGIONS, SET_WINE_STYLE } from "../actions/actionsPicker";
+import {
+  SET_WINE_STYLE,
+  SET_WINE_COUNTRIES,
+  SET_SELECTED_WINE_COUNTRIES
+} from "../actions/actionsPicker";
 
 // Temp Data
 import stylesData from "../../data/wineStyles";
 
 const initialState = {
+  countriesLoaded: false,
   loadingRegions: false,
-  selectedStyle: "style1",
-  wineStyles: stylesData
+  wineStyles: stylesData,
+  selectedStyle: "",
+  wineCountries: [],
+  selectedCountries: []
 };
 
 export default function(state = initialState, action) {
@@ -16,10 +23,19 @@ export default function(state = initialState, action) {
         ...state,
         selectedStyle: action.payload
       };
-    case LOADING_REGIONS:
+    case SET_WINE_COUNTRIES: {
       return {
-        ...state
+        ...state,
+        countriesLoaded: true,
+        wineCountries: [...action.payload]
       };
+    }
+    case SET_SELECTED_WINE_COUNTRIES: {
+      return {
+        ...state,
+        selectedCountries: [...action.payload]
+      };
+    }
     default:
       return state;
   }

@@ -25,7 +25,8 @@ const {
   postWine,
   postNewGrape,
   searchWine,
-  deleteSearchObjects
+  deleteSearchObjects,
+  getExistingCountries
 } = require("./handlers/wines");
 
 const { getDictionary } = require("./handlers/ui");
@@ -34,6 +35,7 @@ const { getDictionary } = require("./handlers/ui");
 app.get("/dict/:lang", getDictionary);
 
 // wine routes
+app.get("/countries", getExistingCountries);
 app.post("/region", postNewRegion);
 app.delete("/region/:regionId", deleteRegion);
 app.post("/wine", postWine);

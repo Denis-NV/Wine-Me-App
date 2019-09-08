@@ -28,14 +28,27 @@ const styles = {
 };
 
 exports.getExistingCountries = (req, res) => {
-  // db.collection("countries")
+  db.collection("countries")
+    .orderBy("dicRef", "asc")
+    .get()
+    .then(docsArr => {
+      let countries = [];
+      docsArr.forEach(docRef => {
+        countries.push({
+          code: docRef.id,
+          ...docRef.data()
+        });
+      });
+      return res.json(countries);
+    })
+    .catch(err => console.log(err));
 };
 
 exports.postNewRegion = (req, res) => {
   const nowISOstr = new Date().toISOString();
   //
   const newRegion = {
-    dictionary: req.body.dictionary ? req.body.dictionary : {},
+    nameDic: req.body.nameDic ? req.body.nameDic : {},
     countryRef: req.body.countryRef,
     countryDicRef: req.body.countryDicRef,
     createdAt: nowISOstr,
