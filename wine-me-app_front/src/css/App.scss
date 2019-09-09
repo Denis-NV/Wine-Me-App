@@ -11,10 +11,10 @@
 .mainHeader {
   z-index: 2;
   position: fixed;
+  top: 0;
   padding: 0;
   margin: 0;
   height: $headerHeightWeb;
-  top: 0;
   width: 100%;
   max-width: $maxWebWidth;
   color: white;

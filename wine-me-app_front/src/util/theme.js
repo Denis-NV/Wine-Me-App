@@ -26,7 +26,10 @@ export default {
   },
   customValues: {
     overlayColorSolid: "rgba(188, 170, 164, 1)",
-    overlayColorOpacity: "rgba(188, 170, 164, 0.7)"
+    overlayColorOpacity: "rgba(188, 170, 164, 0.7)",
+    headerHeightWeb: 72,
+    headerHeightSmart: 35,
+    bottomNavHeight: 65
   },
   customStyles: {}
 };
