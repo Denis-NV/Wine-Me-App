@@ -7,7 +7,8 @@ import { connect } from "react-redux";
 
 // MUI
 import withStyles from "@material-ui/core/styles/withStyles";
-import AppBar from "@material-ui/core/AppBar";
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import AssistantIco from "@material-ui/icons/Assistant";
@@ -20,26 +21,14 @@ import AccountBoxIco from "@material-ui/icons/AccountBox";
 const styles = theme => {
   return {
     ...theme.customStyles,
-    appBar: {
-      flexDirection: "row",
-      maxHeight: 72
-    },
-    logoCont: {
-      margin: "auto",
-      padding: "0px 20px 0 20px",
-      "& img": {
-        objectFit: "cover",
-        padding: "0",
-        margin: "0"
-      },
-      "@media (max-width: 600px)": {
-        padding: 0,
-        "& img": {
-          width: 150,
-          height: "auto"
-        }
-      }
-    }
+    logoImg: props => ({
+      width: "80%",
+      maxHeight: props.UI.isSmartphone
+        ? theme.customValues.headerHeightSmart
+        : theme.customValues.headerHeightWeb,
+      objectFit: "contain",
+      margin: "auto"
+    })
   };
 };
 
@@ -58,36 +47,38 @@ class AppHeader extends Component {
     const value = location.pathname.split("/")[1];
 
     const navMarkup = (
-      <Tabs
-        value={value}
-        onChange={this.handleChange}
-        aria-label="Wine Me App Header Nav"
-        variant="fullWidth"
-      >
-        <Tab icon={<AssistantIco />} label={dict["nav_picker"]} value="" />
-        <Tab icon={<ViewListIco />} label={dict["nav_wines"]} value="wines" />
-        <Tab icon={<SearchIco />} label={dict["nav_search"]} value="search" />
-        <Tab
-          icon={<AccountBoxIco />}
-          label={dict["nav_profile"]}
-          value="profile"
-        />
-      </Tabs>
+      <Grid item xs={8}>
+        <Tabs
+          value={value}
+          onChange={this.handleChange}
+          aria-label="Wine Me App Header Nav"
+          variant="fullWidth"
+        >
+          <Tab icon={<AssistantIco />} label={dict["nav_picker"]} value="" />
+          <Tab icon={<ViewListIco />} label={dict["nav_wines"]} value="wines" />
+          <Tab icon={<SearchIco />} label={dict["nav_search"]} value="search" />
+          <Tab
+            icon={<AccountBoxIco />}
+            label={dict["nav_profile"]}
+            value="profile"
+          />
+        </Tabs>
+      </Grid>
     );
 
     return (
-      <div className="mainHeader">
-        <AppBar position="relative" className={classes.appBar}>
-          <div className={classes.logoCont}>
+      <Box bgcolor="#455a64" className="mainHeader" boxShadow={2}>
+        <Grid container>
+          <Grid item xs={isTouchScreen ? 12 : 4} style={{ display: "flex" }}>
             <img
               src={isTouchScreen ? "static/logo.png" : "static/logo_tag.png"}
-              height="72"
               alt="Logo"
+              className={classes.logoImg}
             />
-          </div>
+          </Grid>
           {!isTouchScreen && navMarkup}
-        </AppBar>
-      </div>
+        </Grid>
+      </Box>
     );
   }
 }

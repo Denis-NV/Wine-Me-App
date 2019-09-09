@@ -16,18 +16,22 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-
 import Select from "@material-ui/core/Select";
+
+// Icons
+import ProducerIcon from "../../icons/ProducerIcon";
+import RegionIcon from "../../icons/RegionIcon";
+import GrapeIcon from "../../icons/GrapeIcon";
 
 // Components
 
 // IMPORTS END
 
-const MenuProps = heigth => {
+const MenuProps = height => {
   return {
     PaperProps: {
       style: {
-        maxHeight: heigth
+        maxHeight: height
       }
     }
   };
@@ -49,6 +53,22 @@ const useStyles = makeStyles(theme => ({
   },
   chip: {
     margin: 2
+  },
+  browserHeaderCol: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-end"
+  },
+  browserIcon: {
+    width: "40%",
+    height: "auto",
+    display: "block",
+    color: theme.palette.primary.dark
+  },
+  browserContentCol: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start"
   }
 }));
 
@@ -78,6 +98,61 @@ const StyleBrowser = props => {
   const handleChange = event => {
     setSelectedWineCountries(event.target.value);
   };
+
+  const browserMarkup = (
+    <Box p={2} pt={4}>
+      <Grid container>
+        <Grid item xs={4} className={classes.browserHeaderCol}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <RegionIcon className={classes.browserIcon} />
+            <Typography variant="subtitle1" display="block">
+              REGIONS
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={4} className={classes.browserHeaderCol}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <GrapeIcon className={classes.browserIcon} />
+            <Typography variant="subtitle1" display="block">
+              GRAPES
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={4} className={classes.browserHeaderCol}>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <ProducerIcon className={classes.browserIcon} />
+            <Typography variant="subtitle1" display="block">
+              PRODUCERS
+            </Typography>
+          </Box>
+        </Grid>
+      </Grid>
+      <hr />
+      <Grid container>
+        <Grid item xs={4} className={classes.browserContentCol}>
+          <Chip key="test1" label="Test" className={classes.chip} />
+          <Chip key="test2" label="Test" className={classes.chip} />
+          <Chip key="test3" label="Test" className={classes.chip} />
+          <Chip key="test4" label="Test" className={classes.chip} />
+          <Chip key="test5" label="Test" className={classes.chip} />
+          <Chip key="test6" label="Test" className={classes.chip} />
+          <Chip key="test7" label="Test" className={classes.chip} />
+        </Grid>
+        <Grid item xs={4} className={classes.browserContentCol}>
+          <Chip key="test11" label="Test" className={classes.chip} />
+          <Chip key="test12" label="Test" className={classes.chip} />
+          <Chip key="test13" label="Test" className={classes.chip} />
+        </Grid>
+        <Grid item xs={4} className={classes.browserContentCol}>
+          <Chip key="test21" label="Test" className={classes.chip} />
+          <Chip key="test22" label="Test" className={classes.chip} />
+          <Chip key="test23" label="Test" className={classes.chip} />
+          <Chip key="test24" label="Test" className={classes.chip} />
+          <Chip key="test25" label="Test" className={classes.chip} />
+        </Grid>
+      </Grid>
+    </Box>
+  );
 
   // const smartphoneMarkup = <Fragment>Smartphone</Fragment>;
   const webMarkup = (
@@ -124,7 +199,7 @@ const StyleBrowser = props => {
         </Box>
       </Grid>
       <Grid item xs={12} sm={8}>
-        <Box p={2}>Browser</Box>
+        {browserMarkup}
       </Grid>
     </Grid>
   );
