@@ -6,14 +6,21 @@ import {
 
 // Temp Data
 import stylesData from "../../data/wineStyles";
+import countries from "../../data/wineCountries";
 
 const initialState = {
-  countriesLoaded: false,
-  loadingRegions: false,
+  countriesLoaded: true,
+  filtersLoaded: false,
   wineStyles: stylesData,
-  selectedStyle: "",
-  wineCountries: [],
-  selectedCountries: []
+  wineCountries: [...countries],
+  wineRegions: [],
+  wineGrapes: [],
+  wineProducers: [],
+  selectedStyle: "redStyle1",
+  selectedCountries: [],
+  pinnedRegions: {},
+  pinnedGrapes: {},
+  pinneProducers: {}
 };
 
 export default function(state = initialState, action) {

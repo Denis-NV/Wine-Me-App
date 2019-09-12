@@ -3,7 +3,10 @@ import PropTypes from "prop-types";
 
 // Redux
 import { connect } from "react-redux";
-import { setSelectedWineCountries } from "../../../redux/actions/actionsPicker";
+import {
+  setSelectedWineCountries,
+  setWineStyle
+} from "../../../redux/actions/actionsPicker";
 
 // MUI
 import { makeStyles } from "@material-ui/styles";
@@ -17,11 +20,13 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import Button from "@material-ui/core/Button";
 
 // Icons
 import ProducerIcon from "../../icons/ProducerIcon";
 import RegionIcon from "../../icons/RegionIcon";
 import GrapeIcon from "../../icons/GrapeIcon";
+import ArrowIcon from "@material-ui/icons/Navigation";
 
 // Components
 
@@ -78,6 +83,7 @@ const StyleBrowser = props => {
 
   const {
     setSelectedWineCountries,
+    setWineStyle,
     // UI: { isSmartphone, dict },
     UI: { dict },
     picker: { selectedStyle, wineStyles, wineCountries, selectedCountries }
@@ -99,35 +105,58 @@ const StyleBrowser = props => {
     setSelectedWineCountries(event.target.value);
   };
 
+  const handleBackNav = event => {
+    setSelectedWineCountries([]);
+    setWineStyle("");
+  };
+
+  // Markup
   const browserMarkup = (
     <Box p={2} pt={4}>
       <Grid container>
         <Grid item xs={4} className={classes.browserHeaderCol}>
           <Box display="flex" flexDirection="column" alignItems="center">
             <RegionIcon className={classes.browserIcon} />
-            <Typography variant="subtitle1" display="block">
-              REGIONS
+            <Typography
+              variant="subtitle1"
+              display="block"
+              color="textSecondary"
+            >
+              {dict["regions"].toUpperCase()}
             </Typography>
           </Box>
         </Grid>
         <Grid item xs={4} className={classes.browserHeaderCol}>
           <Box display="flex" flexDirection="column" alignItems="center">
             <GrapeIcon className={classes.browserIcon} />
-            <Typography variant="subtitle1" display="block">
-              GRAPES
+            <Typography
+              variant="subtitle1"
+              display="block"
+              color="textSecondary"
+            >
+              {dict["grapes"].toUpperCase()}
             </Typography>
           </Box>
         </Grid>
         <Grid item xs={4} className={classes.browserHeaderCol}>
           <Box display="flex" flexDirection="column" alignItems="center">
             <ProducerIcon className={classes.browserIcon} />
-            <Typography variant="subtitle1" display="block">
-              PRODUCERS
+            <Typography
+              variant="subtitle1"
+              display="block"
+              color="textSecondary"
+            >
+              {dict["producers"].toUpperCase()}
             </Typography>
           </Box>
         </Grid>
       </Grid>
-      <hr />
+      <Box
+        component="hr"
+        borderColor="primary.main"
+        borderTop={0}
+        borderLeft={0}
+      />
       <Grid container>
         <Grid item xs={4} className={classes.browserContentCol}>
           <Chip key="test1" label="Test" className={classes.chip} />
@@ -164,9 +193,20 @@ const StyleBrowser = props => {
           py={3}
           boxShadow={1}
         >
-          <Typography variant="h5">
-            {dict[selectedStyleData["nameDicRef"]]}
+          <Typography variant="h4" align="center" gutterBottom>
+            {dict[selectedStyleData["nameDicRef"]].toUpperCase()}
           </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ paddingLeft: 8, display: "flex", margin: "auto" }}
+            onClick={handleBackNav}
+          >
+            <ArrowIcon
+              style={{ transform: "rotate(-90deg)", marginRight: 8 }}
+            />
+            {dict["choose_another_style"]}
+          </Button>
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="select-multiple-chip">
               {dict["select_countries"]}
@@ -211,7 +251,8 @@ const StyleBrowser = props => {
 StyleBrowser.propTypes = {
   UI: PropTypes.object.isRequired,
   picker: PropTypes.object.isRequired,
-  setSelectedWineCountries: PropTypes.func.isRequired
+  setSelectedWineCountries: PropTypes.func.isRequired,
+  setWineStyle: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -221,7 +262,10 @@ const mapStateToProps = state => {
   };
 };
 
-const mapActionsToProps = { setSelectedWineCountries };
+const mapActionsToProps = {
+  setSelectedWineCountries,
+  setWineStyle
+};
 
 export default connect(
   mapStateToProps,
