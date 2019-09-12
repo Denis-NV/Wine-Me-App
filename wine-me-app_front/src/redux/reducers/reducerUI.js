@@ -8,7 +8,6 @@ import {
 
 const initialState = {
   initDataLoaded: false,
-  loading: false,
   isTouchScreen: false,
   isSmartphone: false,
   focusedWineStyle: 0,
@@ -38,13 +37,11 @@ export default function(state = initialState, action) {
       };
     case SET_ERRORS:
       return {
-        ...state,
-        loading: false
+        ...state
       };
     case CLEAR_ERRORS:
       return {
-        ...state,
-        loading: false
+        ...state
       };
     default:
       return state;

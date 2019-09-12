@@ -15,7 +15,7 @@ export const setTouchScreenFlag = (isTouchScreen, isSmartphone) => dispatch => {
   });
 };
 
-export const loadGlobalDictionary = lang => dispatch => {
+export const loadGlobalDictionary = (lang = "en") => dispatch => {
   //
   // axios
   //   .get(`/dict/${lang}`)

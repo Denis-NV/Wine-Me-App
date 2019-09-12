@@ -5,7 +5,10 @@ import Swipe from "react-easy-swipe";
 // Redux
 import { connect } from "react-redux";
 import { setWineStyleFocus } from "../../../redux/actions/actionsUI";
-import { setWineStyle } from "../../../redux/actions/actionsPicker";
+import {
+  setWineStyle,
+  getExistingCountries
+} from "../../../redux/actions/actionsPicker";
 
 // MUI
 import { makeStyles } from "@material-ui/styles";
@@ -63,7 +66,7 @@ const StylePickerComp = props => {
   const {
     setWineStyleFocus,
     UI: { isSmartphone, focusedWineStyle },
-    picker: { wineStyles }
+    picker: { wineStyles, wineCountries }
   } = props;
 
   // Positioning
@@ -94,6 +97,8 @@ const StylePickerComp = props => {
 
   const handleCardClick = event => {
     props.setWineStyle(event.target.id);
+
+    if (wineCountries.length === 0) props.getExistingCountries();
   };
 
   // Markup
@@ -179,7 +184,8 @@ StylePickerComp.propTypes = {
   UI: PropTypes.object.isRequired,
   setWineStyleFocus: PropTypes.func.isRequired,
   paddingFactor: PropTypes.number.isRequired,
-  setWineStyle: PropTypes.func.isRequired
+  setWineStyle: PropTypes.func.isRequired,
+  getExistingCountries: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -188,7 +194,8 @@ const mapStateToProps = state => {
 
 const mapActionsToProps = {
   setWineStyleFocus,
-  setWineStyle
+  setWineStyle,
+  getExistingCountries
 };
 
 export default connect(

@@ -30,5 +30,9 @@
   "nav_wines": "Wines",
   "select_countries": "Select Countries",
   "france": "France",
-  "portugal": "Portugal"
+  "portugal": "Portugal",
+  "regions": "Regions",
+  "grapes": "Grapes",
+  "producers": "Producers",
+  "choose_another_style": "Choose another style"
 }

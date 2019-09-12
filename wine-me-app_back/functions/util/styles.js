@@ -1,0 +1,22 @@
+module.exports = {
+  total: 0,
+  redTotal: 0,
+  whiteTotal: 0,
+  roseTotal: 0,
+  redStyle1: 0,
+  redStyle1_percent: 0,
+  redStyle2: 0,
+  redStyle2_percent: 0,
+  redStyle3: 0,
+  redStyle3_percent: 0,
+  whiteStyle1: 0,
+  whiteStyle1_percent: 0,
+  whiteStyle2: 0,
+  whiteStyle2_percent: 0,
+  whiteStyle3: 0,
+  whiteStyle3_percent: 0,
+  roseStyle1: 0,
+  roseStyle1_percent: 0,
+  roseStyle2: 0,
+  roseStyle2_percent: 0
+};

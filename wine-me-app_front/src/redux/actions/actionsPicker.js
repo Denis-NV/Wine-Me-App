@@ -5,13 +5,11 @@ export const SET_WINE_STYLE = "SET_WINE_STYLE";
 export const SET_WINE_COUNTRIES = "SET_WINE_COUNTRIES";
 export const SET_SELECTED_WINE_COUNTRIES = "SET_SELECTED_WINE_COUNTRIES";
 
-export const setWineStyle = wineStyle => dispatch => {
+export const setWineStyle = (wineStyle = "") => dispatch => {
   dispatch({ type: SET_WINE_STYLE, payload: wineStyle });
-
-  dispatch(loadExistingCountries());
 };
 
-export const loadExistingCountries = () => dispatch => {
+export const getExistingCountries = () => dispatch => {
   // axios
   //   .get(`/countries`)
   //   .then(res => {
@@ -23,6 +21,14 @@ export const loadExistingCountries = () => dispatch => {
   dispatch({ type: SET_WINE_COUNTRIES, payload: countries });
 };
 
-export const setSelectedWineCountries = codeList => dispatch => {
+export const getWineFilters = (
+  pinnedRegions = [],
+  pinnedGrapes = [],
+  pinnedProducers = []
+) => dispatch => {
+  //
+};
+
+export const setSelectedWineCountries = (codeList = []) => dispatch => {
   dispatch({ type: SET_SELECTED_WINE_COUNTRIES, payload: codeList });
 };

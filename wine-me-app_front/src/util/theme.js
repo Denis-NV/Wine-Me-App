@@ -22,6 +22,9 @@ export default {
     },
     secondary: {
       main: "#afb42b"
+    },
+    text: {
+      secondary: "#263238"
     }
   },
   customValues: {

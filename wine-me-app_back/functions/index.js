@@ -20,28 +20,41 @@ app.use(cors());
 const { db, admin } = require("./util/admin");
 
 const {
-  postNewRegion,
-  deleteRegion,
   postWine,
-  postNewGrape,
   searchWine,
-  deleteSearchObjects,
-  getExistingCountries
+  deleteSearchObjects
 } = require("./handlers/wines");
-
+const {
+  postNewRegion,
+  postNewGrape,
+  postNewProducer,
+  deleteRegion,
+  deleteGrape,
+  deleteProducer,
+  getExistingCountries,
+  getFilters,
+  getWineStyles
+} = require("./handlers/filters");
 const { getDictionary } = require("./handlers/ui");
 
 // UI routes
 app.get("/dict/:lang", getDictionary);
 
-// wine routes
-app.get("/countries", getExistingCountries);
-app.post("/region", postNewRegion);
-app.delete("/region/:regionId", deleteRegion);
+// wines routes
 app.post("/wine", postWine);
 app.post("/searchwines", searchWine);
 app.post("/deletesearchobjects", deleteSearchObjects);
+
+// filters routes
+app.get("/styles", getWineStyles);
+app.post("/filters", getFilters);
+app.get("/countries", getExistingCountries);
+app.post("/region", postNewRegion);
 app.post("/grape", postNewGrape);
+app.post("/producer", postNewProducer);
+app.delete("/region/:regionId", deleteRegion);
+app.delete("/grape/:grapeId", deleteGrape);
+app.delete("/producer/:producerId", deleteProducer);
 
 // user routes
 
@@ -68,7 +81,7 @@ exports.onWineCreated = functions
     return index.saveObject(wine);
   });
 
-exports.updateCountryOnRegionCreate = functions
+exports.onRegionCreated = functions
   .region("europe-west1")
   .firestore.document("regions/{regionId}")
   .onCreate((snap, context) => {
@@ -96,30 +109,237 @@ exports.updateCountryOnRegionCreate = functions
       });
   });
 
-exports.onRegionDeleted = functions
+exports.onGrapeCreated = functions
   .region("europe-west1")
-  .firestore.document("regions/{regionId}")
-  .onDelete((snap, context) => {
-    const regionId = context.params.regionId;
-    const region = snap.data();
+  .firestore.document("grapes/{grapeId}")
+  .onCreate((snap, context) => {
+    //
+    const grapeId = context.params.grapeId;
+    const grape = snap.data();
+    const docs = [];
+    if (grape.countriesRefs && grape.countriesRefs.length > 0) {
+      grape.countriesRefs.forEach(code => {
+        docs.push(db.doc(`countries/${code}`));
+      });
+    }
+    return db
+      .getAll(...docs)
+      .then(docRefsArr => {
+        let ind = -1;
+        docRefsArr.forEach(docRef => {
+          ind++;
+          if (docRef.exists) {
+            return docs[ind].update({
+              grapesRefs: admin.firestore.FieldValue.arrayUnion(grapeId)
+            });
+          } else {
+            return docs[ind].set({
+              dicRef: grape.countriesDicRefs[ind],
+              grapesRefs: [grapeId]
+            });
+          }
+        });
+      })
+      .catch(err => console.log(err));
+  });
+
+exports.onProducerCreated = functions
+  .region("europe-west1")
+  .firestore.document("producers/{producerId}")
+  .onCreate((snap, context) => {
+    //
+    const producerId = context.params.producerId;
+    const producer = snap.data();
 
     return db
-      .doc(`countries/${region.countryRef}`)
+      .doc(`countries/${producer.countryRef}`)
       .get()
       .then(docRef => {
         if (docRef.exists) {
-          const regionsRefs = docRef.data().regionsRefs;
-
-          if (regionsRefs.length === 1 && regionsRefs[0] === regionId) {
-            return db.doc(`countries/${region.countryRef}`).delete();
-          } else {
-            return db.doc(`countries/${region.countryRef}`).update({
-              regionsRefs: admin.firestore.FieldValue.arrayRemove(regionId)
-            });
-          }
+          return db.doc(`countries/${producer.countryRef}`).update({
+            producersRefs: admin.firestore.FieldValue.arrayUnion(producerId)
+          });
+        } else {
+          return db.doc(`countries/${producer.countryRef}`).set({
+            dicRef: producer.countryDicRef,
+            regionsRefs: [producerId]
+          });
         }
       })
       .catch(err => {
         console.log(err);
       });
   });
+
+exports.onRegionDeleted = functions
+  .region("europe-west1")
+  .firestore.document("regions/{regionId}")
+  .onDelete((snap, context) => {
+    const regionId = context.params.regionId;
+    const region = snap.data();
+    const grapesQuery = db
+      .collection("grapes")
+      .where("regionsRefs", "array-contains", regionId);
+    const producersQuery = db
+      .collection("producers")
+      .where("regionsRefs", "array-contains", regionId);
+    const countriesQuery = db.doc(`countries/${region.countryRef}`);
+
+    return grapesQuery
+      .get()
+      .then(docRefs => {
+        docRefs.forEach(docRef => {
+          db.doc(`grapes/${docRef.id}`).update({
+            regionsRefs: admin.firestore.FieldValue.arrayRemove(regionId)
+          });
+        });
+        return producersQuery.get();
+      })
+      .then(docRefs => {
+        docRefs.forEach(docRef => {
+          db.doc(`producers/${docRef.id}`).update({
+            regionsRefs: admin.firestore.FieldValue.arrayRemove(regionId)
+          });
+        });
+        return countriesQuery.get();
+      })
+      .then(docRef => {
+        if (docRef.exists) {
+          return countriesQuery.update({
+            regionsRefs: admin.firestore.FieldValue.arrayRemove(regionId)
+          });
+        }
+      })
+      .then(result => {
+        return countriesQuery.get();
+      })
+      .then(docRef => deleteCountry(docRef, region.countryRef))
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
+exports.onGrapeDeleted = functions
+  .region("europe-west1")
+  .firestore.document("grapes/{grapeId}")
+  .onDelete((snap, context) => {
+    const grapeId = context.params.grapeId;
+    const grape = snap.data();
+    const regionsQuery = db
+      .collection("regions")
+      .where("grapesRefs", "array-contains", grapeId);
+    const producersQuery = db
+      .collection("producers")
+      .where("grapesRefs", "array-contains", grapeId);
+
+    const docs = [];
+    if (grape.countriesRefs && grape.countriesRefs.length > 0) {
+      grape.countriesRefs.forEach(code => {
+        docs.push(db.doc(`countries/${code}`));
+      });
+    }
+    return regionsQuery
+      .get()
+      .then(docRefs => {
+        docRefs.forEach(docRef => {
+          db.doc(`regions/${docRef.id}`).update({
+            grapesRefs: admin.firestore.FieldValue.arrayRemove(grapeId)
+          });
+        });
+        return producersQuery.get();
+      })
+      .then(docRefs => {
+        docRefs.forEach(docRef => {
+          db.doc(`producers/${docRef.id}`).update({
+            grapesRefs: admin.firestore.FieldValue.arrayRemove(grapeId)
+          });
+        });
+        return db.getAll(...docs);
+      })
+      .then(docRefsArr => {
+        let ind = -1;
+        docRefsArr.forEach(docRef => {
+          ind++;
+          if (docRef.exists) {
+            docs[ind]
+              .update({
+                grapesRefs: admin.firestore.FieldValue.arrayRemove(grapeId)
+              })
+              .then(result => {
+                console.log(result);
+                return docs[ind].get();
+              })
+              .then(newDocRef => {
+                console.log("newDocRef", newDocRef);
+                deleteCountry(newDocRef, grape.countriesRefs[ind]);
+              });
+          }
+        });
+      })
+      .catch(err => console.log(err));
+  });
+
+exports.onProducerDeleted = functions
+  .region("europe-west1")
+  .firestore.document("producers/{producerId}")
+  .onDelete((snap, context) => {
+    const producerId = context.params.producerId;
+    const producer = snap.data();
+    const regionsQuery = db
+      .collection("regions")
+      .where("producersRefs", "array-contains", producerId);
+    const grapesQuery = db
+      .collection("grapes")
+      .where("producersRefs", "array-contains", producerId);
+    const countriesQuery = db.doc(`countries/${producer.countryRef}`);
+
+    return regionsQuery
+      .get()
+      .then(docRefs => {
+        docRefs.forEach(docRef => {
+          db.doc(`regions/${docRef.id}`).update({
+            producersRefs: admin.firestore.FieldValue.arrayRemove(producerId)
+          });
+        });
+        return grapesQuery.get();
+      })
+      .then(docRefs => {
+        docRefs.forEach(docRef => {
+          db.doc(`grapes/${docRef.id}`).update({
+            producersRefs: admin.firestore.FieldValue.arrayRemove(producerId)
+          });
+        });
+        return countriesQuery.get();
+      })
+      .then(docRef => {
+        if (docRef.exists) {
+          return countriesQuery.update({
+            producersRefs: admin.firestore.FieldValue.arrayRemove(producerId)
+          });
+        }
+      })
+      .then(result => {
+        return countriesQuery.get();
+      })
+      .then(docRef => deleteCountry(docRef, producer.countryRef))
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
+// ~~~~~~~~~~~~~~~~
+// Util functions
+
+const deleteCountry = (docRef, code) => {
+  const regionsRefs = docRef.data().regionsRefs || [];
+  const grapesRefs = docRef.data().grapesRefs || [];
+  const producersRefs = docRef.data().producersRefs || [];
+
+  if (
+    regionsRefs.length === 0 &&
+    grapesRefs.length === 0 &&
+    producersRefs.length === 0
+  ) {
+    return db.doc(`countries/${code}`).delete();
+  }
+};
