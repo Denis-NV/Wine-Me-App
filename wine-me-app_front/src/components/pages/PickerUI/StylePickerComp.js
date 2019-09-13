@@ -7,7 +7,8 @@ import { connect } from "react-redux";
 import { setWineStyleFocus } from "../../../redux/actions/actionsUI";
 import {
   setWineStyle,
-  getExistingCountries
+  getExistingCountries,
+  getWineFilters
 } from "../../../redux/actions/actionsPicker";
 
 // MUI
@@ -65,7 +66,10 @@ const useStyles = makeStyles(theme => ({
 const StylePickerComp = props => {
   const {
     setWineStyleFocus,
-    UI: { isSmartphone, focusedWineStyle },
+    setWineStyle,
+    getExistingCountries,
+    getWineFilters,
+    UI: { isSmartphone, focusedWineStyle, currentLang },
     picker: { wineStyles, wineCountries }
   } = props;
 
@@ -96,9 +100,11 @@ const StylePickerComp = props => {
   };
 
   const handleCardClick = event => {
-    props.setWineStyle(event.target.id);
+    setWineStyle(event.target.id);
 
-    if (wineCountries.length === 0) props.getExistingCountries();
+    getWineFilters(event.target.id, currentLang);
+
+    if (wineCountries.length === 0) getExistingCountries();
   };
 
   // Markup
@@ -185,7 +191,8 @@ StylePickerComp.propTypes = {
   setWineStyleFocus: PropTypes.func.isRequired,
   paddingFactor: PropTypes.number.isRequired,
   setWineStyle: PropTypes.func.isRequired,
-  getExistingCountries: PropTypes.func.isRequired
+  getExistingCountries: PropTypes.func.isRequired,
+  getWineFilters: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -195,7 +202,8 @@ const mapStateToProps = state => {
 const mapActionsToProps = {
   setWineStyleFocus,
   setWineStyle,
-  getExistingCountries
+  getExistingCountries,
+  getWineFilters
 };
 
 export default connect(
