@@ -28,7 +28,7 @@ const styles = theme => {
 class PickerView extends Component {
   render() {
     const {
-      picker: { countriesLoaded, selectedStyle }
+      picker: { selectedStyle, wineCountries }
     } = this.props;
 
     return (
@@ -38,7 +38,10 @@ class PickerView extends Component {
             <StylePickerComp paddingFactor={paddingFactor} />{" "}
           </Box>
         ) : (
-          <WithLoader isLoaded={countriesLoaded} component={StyleBrowser} />
+          <WithLoader
+            isLoaded={wineCountries.length > 0}
+            component={StyleBrowser}
+          />
         )}
       </Fragment>
     );

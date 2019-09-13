@@ -5,7 +5,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {
   setSelectedWineCountries,
-  setWineStyle
+  setWineStyle,
+  getWineFilters,
+  resetWineFilters
 } from "../../../redux/actions/actionsPicker";
 
 // MUI
@@ -21,6 +23,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Avatar from "@material-ui/core/Avatar";
 
 // Icons
 import ProducerIcon from "../../icons/ProducerIcon";
@@ -56,8 +60,40 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexWrap: "wrap"
   },
-  chip: {
-    margin: 2
+  chipRoot: {
+    margin: 2,
+    height: "auto",
+    width: "fit-content",
+    minHeight: 32,
+    borderRadius: 22,
+    padding: 2,
+    "&:hover > .MuiChip-deleteIcon": {
+      transform: "rotate(180deg)",
+      transition: "transform 150ms ease-out"
+    }
+  },
+  chipLabel: {
+    whiteSpace: "normal",
+    textAlign: "center",
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingLeft: 15
+  },
+  chipDelete: {
+    height: 25,
+    width: 25,
+    margin: 0,
+    transform: "rotate(45deg)",
+    transition: "transform 150ms ease-out",
+    "&:hover": {
+      fill: "currentColor",
+      color: "rgba(0, 0, 0, 0.26)"
+    }
+  },
+  chipAvatar: {
+    width: 40,
+    height: 40,
+    marginRight: 0
   },
   browserHeaderCol: {
     display: "flex",
@@ -73,7 +109,8 @@ const useStyles = makeStyles(theme => ({
   browserContentCol: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
+    alignItems: "center"
   }
 }));
 
@@ -84,9 +121,20 @@ const StyleBrowser = props => {
   const {
     setSelectedWineCountries,
     setWineStyle,
+    getWineFilters,
+    resetWineFilters,
     // UI: { isSmartphone, dict },
-    UI: { dict },
-    picker: { selectedStyle, wineStyles, wineCountries, selectedCountries }
+    UI: { dict, currentLang },
+    picker: {
+      selectedStyle,
+      wineStyles,
+      wineCountries,
+      selectedCountries,
+      filtersLoaded,
+      wineRegions,
+      wineGrapes,
+      wineProducers
+    }
   } = props;
 
   const selectedStyleData = wineStyles[selectedStyle];
@@ -105,12 +153,89 @@ const StyleBrowser = props => {
     setSelectedWineCountries(event.target.value);
   };
 
+  const handleClose = () => {
+    getWineFilters(selectedStyle, currentLang, selectedCountries);
+  };
+
   const handleBackNav = event => {
     setSelectedWineCountries([]);
     setWineStyle("");
+    resetWineFilters();
+  };
+
+  const handleClick = id => event => {
+    //
+    console.log("clicked", id);
   };
 
   // Markup
+
+  const regionsChips = [];
+  wineRegions.forEach(region => {
+    regionsChips.push(
+      <Chip
+        key={region.id}
+        label={`${region.name} (${dict[region.countryDicRef]})`}
+        classes={{
+          root: classes.chipRoot,
+          label: classes.chipLabel,
+          deleteIcon: classes.chipDelete
+        }}
+        clickable={true}
+        onClick={handleClick(region.id)}
+        avatar={
+          <Avatar className={classes.chipAvatar}>{`${Math.round(
+            region.styles[selectedStyle + "_percent"] * 100
+          )}%`}</Avatar>
+        }
+      />
+    );
+  });
+
+  const grapesChips = [];
+  wineGrapes.forEach(grape => {
+    grapesChips.push(
+      <Chip
+        key={grape.id}
+        label={grape.name}
+        avatar={
+          <Avatar className={classes.chipAvatar}>{`${Math.round(
+            grape.styles[selectedStyle + "_percent"] * 100
+          )}%`}</Avatar>
+        }
+        onDelete={() => {}}
+        clickable={true}
+        classes={{
+          root: classes.chipRoot,
+          label: classes.chipLabel,
+          deleteIcon: classes.chipDelete
+        }}
+      />
+    );
+  });
+
+  const producersChips = [];
+  wineProducers.forEach(producer => {
+    producersChips.push(
+      <Chip
+        key={producer.id}
+        label={producer.name}
+        avatar={
+          <Avatar className={classes.chipAvatar}>{`${Math.round(
+            producer.styles[selectedStyle + "_percent"] * 100
+          )}%`}</Avatar>
+        }
+        onDelete={() => {}}
+        clickable={true}
+        classes={{
+          root: classes.chipRoot,
+          label: classes.chipLabel,
+          deleteIcon: classes.chipDelete
+        }}
+      />
+    );
+  });
+
   const browserMarkup = (
     <Box p={2} pt={4}>
       <Grid container>
@@ -156,28 +281,23 @@ const StyleBrowser = props => {
         borderColor="primary.main"
         borderTop={0}
         borderLeft={0}
+        borderRight={0}
       />
+      {!filtersLoaded && (
+        <LinearProgress
+          color="secondary"
+          style={{ marginTop: -6, marginBottom: 4, height: 2 }}
+        />
+      )}
       <Grid container>
         <Grid item xs={4} className={classes.browserContentCol}>
-          <Chip key="test1" label="Test" className={classes.chip} />
-          <Chip key="test2" label="Test" className={classes.chip} />
-          <Chip key="test3" label="Test" className={classes.chip} />
-          <Chip key="test4" label="Test" className={classes.chip} />
-          <Chip key="test5" label="Test" className={classes.chip} />
-          <Chip key="test6" label="Test" className={classes.chip} />
-          <Chip key="test7" label="Test" className={classes.chip} />
+          {regionsChips}
         </Grid>
         <Grid item xs={4} className={classes.browserContentCol}>
-          <Chip key="test11" label="Test" className={classes.chip} />
-          <Chip key="test12" label="Test" className={classes.chip} />
-          <Chip key="test13" label="Test" className={classes.chip} />
+          {grapesChips}
         </Grid>
         <Grid item xs={4} className={classes.browserContentCol}>
-          <Chip key="test21" label="Test" className={classes.chip} />
-          <Chip key="test22" label="Test" className={classes.chip} />
-          <Chip key="test23" label="Test" className={classes.chip} />
-          <Chip key="test24" label="Test" className={classes.chip} />
-          <Chip key="test25" label="Test" className={classes.chip} />
+          {producersChips}
         </Grid>
       </Grid>
     </Box>
@@ -215,6 +335,7 @@ const StyleBrowser = props => {
               multiple
               value={selectedCountries}
               onChange={handleChange}
+              onClose={handleClose}
               input={<Input id="select-multiple-chip" />}
               renderValue={selected => (
                 <div className={classes.chips}>
@@ -252,7 +373,9 @@ StyleBrowser.propTypes = {
   UI: PropTypes.object.isRequired,
   picker: PropTypes.object.isRequired,
   setSelectedWineCountries: PropTypes.func.isRequired,
-  setWineStyle: PropTypes.func.isRequired
+  setWineStyle: PropTypes.func.isRequired,
+  getWineFilters: PropTypes.func.isRequired,
+  resetWineFilters: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -264,7 +387,9 @@ const mapStateToProps = state => {
 
 const mapActionsToProps = {
   setSelectedWineCountries,
-  setWineStyle
+  setWineStyle,
+  getWineFilters,
+  resetWineFilters
 };
 
 export default connect(
