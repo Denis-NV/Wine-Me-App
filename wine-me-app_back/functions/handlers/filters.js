@@ -107,21 +107,29 @@ exports.getFilters = (req, res) => {
               id: docRef.id,
               name:
                 docRef.data().nameDic[currentLang] ||
-                docRef.data().nameDic[defaultLangCode]
+                docRef.data().nameDic[defaultLangCode] ||
+                docRef.data().nameDic[docRef.data().nativeLangCode]
             });
         });
+
         filters[stage].query.shift();
-        if (filters[stage].query.length > 0) constructResponse(stage);
-        else if (stage < filters.length - 1) {
-          filters[stage].data = filters[stage].data.sort((a, b) => {
+
+        const sortStageFilter = filter => {
+          filter.data = filter.data.sort((a, b) => {
             if (a[sortKey][sortSubKey] > b[sortKey][sortSubKey]) return -1;
             if (a[sortKey][sortSubKey] < b[sortKey][sortSubKey]) return 1;
             return 0;
           });
-          //
+        };
+
+        if (filters[stage].query.length > 0) constructResponse(stage);
+        else if (stage < filters.length - 1) {
+          sortStageFilter(filters[stage]);
+
           constructResponse(stage + 1);
         } else {
-          // res.json(filters.map(item => item.data));
+          sortStageFilter(filters[stage]);
+
           let filtersObj = {};
           filters.forEach(item => (filtersObj[item.key] = item.data));
           res.json(filtersObj);
@@ -163,6 +171,7 @@ exports.postNewRegion = (req, res) => {
     nameDic: req.body.nameDic ? req.body.nameDic : {},
     countryRef: req.body.countryRef,
     countryDicRef: req.body.countryDicRef,
+    nativeLangCode: req.body.nativeLangCode,
     imageURL: req.body.imageURL || "",
     createdAt: nowISOstr,
     updatedAt: nowISOstr,
@@ -193,6 +202,7 @@ exports.postNewGrape = (req, res) => {
   const newGrape = {
     nameDic: req.body.nameDic ? req.body.nameDic : {},
     countriesRefs: req.body.countriesRefs,
+    nativeLangCode: req.body.nativeLangCode,
     countriesDicRefs: req.body.countriesDicRefs,
     imageURL: req.body.imageURL || "",
     createdAt: nowISOstr,
@@ -224,6 +234,7 @@ exports.postNewProducer = (req, res) => {
   const newProducer = {
     nameDic: req.body.nameDic ? req.body.nameDic : {},
     countryRef: req.body.countryRef,
+    nativeLangCode: req.body.nativeLangCode,
     countryDicRef: req.body.countryDicRef,
     imageURL: req.body.imageURL || "",
     createdAt: nowISOstr,

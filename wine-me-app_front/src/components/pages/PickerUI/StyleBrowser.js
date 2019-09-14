@@ -3,63 +3,34 @@ import PropTypes from "prop-types";
 
 // Redux
 import { connect } from "react-redux";
-import {
-  setSelectedWineCountries,
-  setWineStyle,
-  getWineFilters,
-  resetWineFilters
-} from "../../../redux/actions/actionsPicker";
+import { setPinnedWineFilters } from "../../../redux/actions/actionsPicker";
 
 // MUI
+// import { useTheme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/styles";
-import { useTheme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Avatar from "@material-ui/core/Avatar";
+import lime from "@material-ui/core/colors/lime";
 
 // Icons
 import ProducerIcon from "../../icons/ProducerIcon";
 import RegionIcon from "../../icons/RegionIcon";
 import GrapeIcon from "../../icons/GrapeIcon";
-import ArrowIcon from "@material-ui/icons/Navigation";
 
 // Components
+import StyleBrowserHeader from "./StyleBrowserHeader";
 
 // IMPORTS END
-
-const MenuProps = height => {
-  return {
-    PaperProps: {
-      style: {
-        maxHeight: height
-      }
-    }
-  };
-};
 
 const useStyles = makeStyles(theme => ({
   ...theme.customStyles,
   menuItem: props => ({
     style1: props
   }),
-  formControl: {
-    minWidth: 120,
-    width: "100%",
-    marginTop: theme.spacing(3)
-  },
-  chips: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
   chipRoot: {
     margin: 2,
     height: "auto",
@@ -67,24 +38,55 @@ const useStyles = makeStyles(theme => ({
     minHeight: 32,
     borderRadius: 22,
     padding: 2,
-    "&:hover > .MuiChip-deleteIcon": {
-      transform: "rotate(180deg)",
-      transition: "transform 150ms ease-out"
+    maxWidth: "100%",
+    border: "1px solid rgba(0, 0, 0, 0.23)",
+    "@media (max-width: 700px)": {
+      paddingRight: 7
     }
+    // "&:hover > .MuiChip-deleteIcon": {
+    //   transform: "rotate(180deg)",
+    //   transition: "transform 150ms ease-out"
+    // }
   },
   chipLabel: {
     whiteSpace: "normal",
     textAlign: "center",
     paddingTop: 2,
     paddingBottom: 2,
-    paddingLeft: 15
+    paddingLeft: 12,
+    paddingRight: 12,
+    "@media (max-width: 700px)": {
+      maxWidth: 60,
+      paddingLeft: 3,
+      paddingRight: 3
+    }
   },
   chipDelete: {
     height: 25,
     width: 25,
     margin: 0,
+    "@media (max-width: 700px)": {
+      marginLeft: -3,
+      marginRight: -5
+    },
+    // transform: "rotate(45deg)",
+    // transition: "transform 150ms ease-out",
+    "&:hover": {
+      fill: "currentColor",
+      color: "rgba(0, 0, 0, 0.26)"
+    }
+  },
+  chipAdd: {
+    height: 25,
+    width: 25,
+    margin: 0,
+
+    "@media (max-width: 700px)": {
+      marginLeft: -3,
+      marginRight: -5
+    },
     transform: "rotate(45deg)",
-    transition: "transform 150ms ease-out",
+    // transition: "transform 150ms ease-out",
     "&:hover": {
       fill: "currentColor",
       color: "rgba(0, 0, 0, 0.26)"
@@ -116,165 +118,91 @@ const useStyles = makeStyles(theme => ({
 
 const StyleBrowser = props => {
   const classes = useStyles({});
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const {
-    setSelectedWineCountries,
-    setWineStyle,
-    getWineFilters,
-    resetWineFilters,
-    // UI: { isSmartphone, dict },
-    UI: { dict, currentLang },
-    picker: {
-      selectedStyle,
-      wineStyles,
-      wineCountries,
-      selectedCountries,
-      filtersLoaded,
-      wineRegions,
-      wineGrapes,
-      wineProducers
-    }
+    setPinnedWineFilters,
+    UI: { dict },
+    picker: { selectedStyle, filtersLoaded, wineFilters }
   } = props;
 
-  const selectedStyleData = wineStyles[selectedStyle];
-  const wineCountriesData = {};
-
-  wineCountries.map(
-    country =>
-      (wineCountriesData[country.code] = {
-        ...country,
-        name: dict[country.dicRef]
-      })
-  );
-
   // Handlers
-  const handleChange = event => {
-    setSelectedWineCountries(event.target.value);
-  };
 
-  const handleClose = () => {
-    getWineFilters(selectedStyle, currentLang, selectedCountries);
-  };
+  const handleClick = (type, id) => event => {
+    setPinnedWineFilters(type, id);
 
-  const handleBackNav = event => {
-    setSelectedWineCountries([]);
-    setWineStyle("");
-    resetWineFilters();
-  };
-
-  const handleClick = id => event => {
-    //
-    console.log("clicked", id);
+    // console.log(wineFilters);
   };
 
   // Markup
+  const constructChips = (type, showCountry = false) => {
+    let typeChips = [];
+    const typeChipsTop = [];
+    const typeChipsBottom = [];
+    const curTypePinned = wineFilters[type].some(item => item.pinned);
+    const otherTypePinned = wineFilters.some((filter, index) => {
+      return index !== type && filter.some(item => item.pinned);
+    });
 
-  const regionsChips = [];
-  wineRegions.forEach(region => {
-    regionsChips.push(
-      <Chip
-        key={region.id}
-        label={`${region.name} (${dict[region.countryDicRef]})`}
-        classes={{
-          root: classes.chipRoot,
-          label: classes.chipLabel,
-          deleteIcon: classes.chipDelete
-        }}
-        clickable={true}
-        onClick={handleClick(region.id)}
-        avatar={
-          <Avatar className={classes.chipAvatar}>{`${Math.round(
-            region.styles[selectedStyle + "_percent"] * 100
-          )}%`}</Avatar>
-        }
-      />
-    );
-  });
+    wineFilters[type].forEach((item, index) => {
+      const isFiltered = item.filteredBy.length > 0;
+      const shade = Math.max(9 - index, 0) * 100;
+      const avtColor = index === 0 ? "rgb(220, 220, 220)" : "#616161";
+      typeChips = item.pinned ? typeChipsTop : typeChipsBottom;
 
-  const grapesChips = [];
-  wineGrapes.forEach(grape => {
-    grapesChips.push(
-      <Chip
-        key={grape.id}
-        label={grape.name}
-        avatar={
-          <Avatar className={classes.chipAvatar}>{`${Math.round(
-            grape.styles[selectedStyle + "_percent"] * 100
-          )}%`}</Avatar>
-        }
-        onDelete={() => {}}
-        clickable={true}
-        classes={{
-          root: classes.chipRoot,
-          label: classes.chipLabel,
-          deleteIcon: classes.chipDelete
-        }}
-      />
-    );
-  });
+      (!otherTypePinned || isFiltered) &&
+        typeChips.push(
+          <Chip
+            key={item.id}
+            variant={item.pinned || !curTypePinned ? "default" : "outlined"}
+            label={
+              item.name + (showCountry ? ` (${dict[item.countryDicRef]})` : "")
+            }
+            classes={{
+              root: classes.chipRoot,
+              label: classes.chipLabel,
+              deleteIcon: item.pinned ? classes.chipDelete : classes.chipAdd
+            }}
+            clickable={true}
+            onClick={handleClick(type, item.id)}
+            onDelete={!curTypePinned ? null : () => {}}
+            avatar={
+              <Avatar
+                className={classes.chipAvatar}
+                style={{
+                  background: lime[shade],
+                  color: avtColor
+                }}
+              >{`${Math.round(
+                item.styles[selectedStyle + "_percent"] * 100
+              )}%`}</Avatar>
+            }
+          />
+        );
+      typeChips = [...typeChipsTop, ...typeChipsBottom];
+    });
+    return typeChips;
+  };
 
-  const producersChips = [];
-  wineProducers.forEach(producer => {
-    producersChips.push(
-      <Chip
-        key={producer.id}
-        label={producer.name}
-        avatar={
-          <Avatar className={classes.chipAvatar}>{`${Math.round(
-            producer.styles[selectedStyle + "_percent"] * 100
-          )}%`}</Avatar>
-        }
-        onDelete={() => {}}
-        clickable={true}
-        classes={{
-          root: classes.chipRoot,
-          label: classes.chipLabel,
-          deleteIcon: classes.chipDelete
-        }}
-      />
+  const constructIcons = (icon, label) => {
+    return (
+      <Grid item xs={4} className={classes.browserHeaderCol}>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <Box component={icon} className={classes.browserIcon} />
+          <Typography variant="subtitle1" display="block" color="textSecondary">
+            {label.toUpperCase()}
+          </Typography>
+        </Box>
+      </Grid>
     );
-  });
+  };
 
   const browserMarkup = (
     <Box p={2} pt={4}>
       <Grid container>
-        <Grid item xs={4} className={classes.browserHeaderCol}>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <RegionIcon className={classes.browserIcon} />
-            <Typography
-              variant="subtitle1"
-              display="block"
-              color="textSecondary"
-            >
-              {dict["regions"].toUpperCase()}
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={4} className={classes.browserHeaderCol}>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <GrapeIcon className={classes.browserIcon} />
-            <Typography
-              variant="subtitle1"
-              display="block"
-              color="textSecondary"
-            >
-              {dict["grapes"].toUpperCase()}
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={4} className={classes.browserHeaderCol}>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <ProducerIcon className={classes.browserIcon} />
-            <Typography
-              variant="subtitle1"
-              display="block"
-              color="textSecondary"
-            >
-              {dict["producers"].toUpperCase()}
-            </Typography>
-          </Box>
-        </Grid>
+        {constructIcons(RegionIcon, dict["regions"])}
+        {constructIcons(GrapeIcon, dict["grapes"])}
+        {constructIcons(ProducerIcon, dict["producers"])}
       </Grid>
       <Box
         component="hr"
@@ -291,91 +219,34 @@ const StyleBrowser = props => {
       )}
       <Grid container>
         <Grid item xs={4} className={classes.browserContentCol}>
-          {regionsChips}
+          {constructChips(0, true)}
         </Grid>
         <Grid item xs={4} className={classes.browserContentCol}>
-          {grapesChips}
+          {constructChips(1, false)}
         </Grid>
         <Grid item xs={4} className={classes.browserContentCol}>
-          {producersChips}
+          {constructChips(2, false)}
         </Grid>
       </Grid>
     </Box>
   );
 
-  // const smartphoneMarkup = <Fragment>Smartphone</Fragment>;
-  const webMarkup = (
+  return (
     <Grid container>
       <Grid item xs={12} sm={4}>
-        <Box
-          bgcolor={theme.customValues.overlayColorSolid}
-          px={2}
-          py={3}
-          boxShadow={1}
-        >
-          <Typography variant="h4" align="center" gutterBottom>
-            {dict[selectedStyleData["nameDicRef"]].toUpperCase()}
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ paddingLeft: 8, display: "flex", margin: "auto" }}
-            onClick={handleBackNav}
-          >
-            <ArrowIcon
-              style={{ transform: "rotate(-90deg)", marginRight: 8 }}
-            />
-            {dict["choose_another_style"]}
-          </Button>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="select-multiple-chip">
-              {dict["select_countries"]}
-            </InputLabel>
-            <Select
-              multiple
-              value={selectedCountries}
-              onChange={handleChange}
-              onClose={handleClose}
-              input={<Input id="select-multiple-chip" />}
-              renderValue={selected => (
-                <div className={classes.chips}>
-                  {selected.map(value => (
-                    <Chip
-                      key={value}
-                      label={wineCountriesData[value].name}
-                      className={classes.chip}
-                    />
-                  ))}
-                </div>
-              )}
-              MenuProps={MenuProps(window.innerHeight - 200)}
-            >
-              {wineCountries.map(country => (
-                <MenuItem key={country.code} value={country.code}>
-                  {wineCountriesData[country.code].name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+        <StyleBrowserHeader />
       </Grid>
       <Grid item xs={12} sm={8}>
         {browserMarkup}
       </Grid>
     </Grid>
   );
-
-  return webMarkup;
-  // return isSmartphone ? smartphoneMarkup : webMarkup;
 };
 
 StyleBrowser.propTypes = {
   UI: PropTypes.object.isRequired,
   picker: PropTypes.object.isRequired,
-  setSelectedWineCountries: PropTypes.func.isRequired,
-  setWineStyle: PropTypes.func.isRequired,
-  getWineFilters: PropTypes.func.isRequired,
-  resetWineFilters: PropTypes.func.isRequired
+  setPinnedWineFilters: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -385,12 +256,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapActionsToProps = {
-  setSelectedWineCountries,
-  setWineStyle,
-  getWineFilters,
-  resetWineFilters
-};
+const mapActionsToProps = { setPinnedWineFilters };
 
 export default connect(
   mapStateToProps,

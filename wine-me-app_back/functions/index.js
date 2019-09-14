@@ -125,9 +125,7 @@ exports.onGrapeCreated = functions
     return db
       .getAll(...docs)
       .then(docRefsArr => {
-        let ind = -1;
-        docRefsArr.forEach(docRef => {
-          ind++;
+        docRefsArr.forEach((docRef, ind) => {
           if (docRef.exists) {
             return docs[ind].update({
               grapesRefs: admin.firestore.FieldValue.arrayUnion(grapeId)
@@ -257,9 +255,7 @@ exports.onGrapeDeleted = functions
         return db.getAll(...docs);
       })
       .then(docRefsArr => {
-        let ind = -1;
-        docRefsArr.forEach(docRef => {
-          ind++;
+        docRefsArr.forEach((docRef, ind) => {
           if (docRef.exists) {
             docs[ind]
               .update({
