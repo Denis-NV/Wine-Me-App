@@ -99,10 +99,10 @@ const StylePickerComp = props => {
     setWineStyleFocus(newIndex);
   };
 
-  const handleCardClick = event => {
-    setWineStyle(event.target.id);
+  const handleCardClick = (i, id) => event => {
+    setWineStyle(i);
 
-    getWineFilters(event.target.id, currentLang);
+    getWineFilters(id, currentLang);
 
     if (wineCountries.length === 0) getExistingCountries();
   };
@@ -111,9 +111,11 @@ const StylePickerComp = props => {
   const cards = [];
 
   // eslint-disable-next-line
-  for (const style in wineStyles) {
+  // for (const style in wineStyles) {
+  for (let i = 0; i < wineStyles.length; i++) {
     const { dict } = props.UI;
-    const styleObj = wineStyles[style];
+    const styleObj = wineStyles[i];
+    const style = styleObj.id;
     const nameStr = dict[styleObj.nameDicRef];
     const descStr = dict[styleObj.descDicRef];
 
@@ -126,7 +128,7 @@ const StylePickerComp = props => {
             className={
               isSmartphone ? classes.carouselCardAction : classes.cardAction
             }
-            onClick={handleCardClick}
+            onClick={handleCardClick(i, style)}
           >
             <CardContent
               className={classes.cardClickArea}
@@ -159,7 +161,7 @@ const StylePickerComp = props => {
   }
 
   const gridMarkup = (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} justify="center">
       {cards}
     </Grid>
   );

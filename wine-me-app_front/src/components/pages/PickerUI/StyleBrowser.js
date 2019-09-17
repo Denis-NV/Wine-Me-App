@@ -95,7 +95,8 @@ const useStyles = makeStyles(theme => ({
   chipAvatar: {
     width: 40,
     height: 40,
-    marginRight: 0
+    marginRight: 0,
+    fontSize: "1rem"
   },
   browserHeaderCol: {
     display: "flex",
@@ -123,8 +124,10 @@ const StyleBrowser = props => {
   const {
     setPinnedWineFilters,
     UI: { dict },
-    picker: { selectedStyle, filtersLoaded, wineFilters }
+    picker: { wineStyles, selectedStyle, filtersLoaded, wineFilters }
   } = props;
+
+  const selectedStyleId = wineStyles[selectedStyle].id;
 
   // Handlers
 
@@ -174,7 +177,7 @@ const StyleBrowser = props => {
                   color: avtColor
                 }}
               >{`${Math.round(
-                item.styles[selectedStyle + "_percent"] * 100
+                item.styles[selectedStyleId + "_percent"] * 100
               )}%`}</Avatar>
             }
           />

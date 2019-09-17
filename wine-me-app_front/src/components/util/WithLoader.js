@@ -27,7 +27,7 @@ const WithLoading = ({ component: Component, isLoaded, ...rest }) => {
             className={classes.progress}
             size={70}
             thickness={3}
-            color="secondary"
+            color="primary"
           />
         </Box>
       )}

@@ -13,7 +13,7 @@ import StylePickerComp from "./PickerUI/StylePickerComp";
 import StyleBrowser from "./PickerUI/StyleBrowser";
 
 // Utils
-import WithLoader from "../util/WithLoader";
+// import WithLoader from "../util/WithLoader";
 
 // IMPORTS END
 
@@ -28,20 +28,17 @@ const styles = theme => {
 class PickerView extends Component {
   render() {
     const {
-      picker: { selectedStyle, wineCountries }
+      picker: { selectedStyle }
     } = this.props;
 
     return (
       <Fragment>
-        {selectedStyle === "" ? (
+        {selectedStyle < 0 ? (
           <Box p={paddingFactor}>
             <StylePickerComp paddingFactor={paddingFactor} />{" "}
           </Box>
         ) : (
-          <WithLoader
-            isLoaded={wineCountries.length > 0}
-            component={StyleBrowser}
-          />
+          <StyleBrowser />
         )}
       </Fragment>
     );

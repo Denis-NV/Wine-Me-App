@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "wine-mate"
+  },
+  "targets": {
+    "wine-mate": {
+      "hosting": {
+        "app": [
+          "wineme"
+        ]
+      }
+    }
+  }
+}

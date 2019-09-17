@@ -15,6 +15,7 @@ import AssistantIco from "@material-ui/icons/Assistant";
 import ViewListIco from "@material-ui/icons/ViewList";
 import SearchIco from "@material-ui/icons/Search";
 import AccountBoxIco from "@material-ui/icons/AccountBox";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 // IMPORTS END
 
@@ -41,7 +42,7 @@ class AppHeader extends Component {
     const {
       classes,
       location,
-      UI: { isTouchScreen, dict }
+      UI: { isTouchScreen, dict, showGlobalLoading }
     } = this.props;
 
     const value = location.pathname.split("/")[1];
@@ -67,7 +68,12 @@ class AppHeader extends Component {
     );
 
     return (
-      <Box bgcolor="#455a64" className="mainHeader" boxShadow={2}>
+      <Box
+        bgcolor="#455a64"
+        className="mainHeader"
+        style={{ minWidth: isTouchScreen ? "100%" : 450 }}
+        boxShadow={2}
+      >
         <Grid container>
           <Grid item xs={isTouchScreen ? 12 : 4} style={{ display: "flex" }}>
             <img
@@ -78,6 +84,12 @@ class AppHeader extends Component {
           </Grid>
           {!isTouchScreen && navMarkup}
         </Grid>
+        {showGlobalLoading && (
+          <LinearProgress
+            color="secondary"
+            style={{ marginTop: 0, marginBottom: 0, height: 5 }}
+          />
+        )}
       </Box>
     );
   }

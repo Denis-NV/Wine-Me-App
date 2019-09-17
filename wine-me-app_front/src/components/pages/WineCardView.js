@@ -22,7 +22,8 @@ class WineCardView extends Component {
     return (
       <div>
         <h2>Wines Card</h2>
-        <br />
+        <p>UNDER CONSTRUCTION</p>
+
         {/* {P_TEN} */}
       </div>
     );

@@ -23,8 +23,8 @@ class ProfileView extends Component {
     return (
       <div>
         <h2>Profile</h2>
-        <br />
         <Link to="/profile/wine">My saved wine</Link>
+        <p>UNDER CONSTRUCTION</p>
       </div>
     );
   }
