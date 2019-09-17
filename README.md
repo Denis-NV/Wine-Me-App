@@ -11,8 +11,8 @@ This is a proof-of-concept / prototype of an app, designed to help novice wine d
 * react-router 5.0.1 - Route management
 * @material-ui 4.3.3 - UI Components
 * Sass - General CSS
-* firebase 6.4.0" - Data Base, Storage, Authentication 
-* firebase-functions 3.1.0" - Rest API
+* firebase 6.4.0 - Data Base, Storage, Authentication 
+* firebase-cloud-functions 3.1.0 - Rest API
 * algoliasearch 3.33.0" - Database 3rd party search engine 
 
 ### Notes
