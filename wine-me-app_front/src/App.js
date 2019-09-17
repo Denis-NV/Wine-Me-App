@@ -3,10 +3,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 
 // Redux
-import {
-  setTouchScreenFlag,
-  loadGlobalDictionary
-} from "./redux/actions/actionsUI";
+import { setTouchScreenFlag, loadInitAssets } from "./redux/actions/actionsUI";
 import { connect } from "react-redux";
 
 // MUI
@@ -15,6 +12,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 
 // Components
 import Router from "./components/Router";
@@ -33,13 +31,24 @@ axios.defaults.baseURL =
 
 const theme = createMuiTheme(themeObj);
 
+const useStyles = makeStyles({
+  "@global": {
+    body: props => ({
+      backgroundColor: "#cfd8dc",
+      minWidth: props.min_width
+    })
+  }
+});
+
 // TODO: Transfer all the external CSS styles to the @global theme
 const App = props => {
   const isTouchScreen = useMediaQuery("(hover: none)");
   const isNarrow = useMediaQuery(useTheme().breakpoints.down("sm"));
   const isSmartphone = isTouchScreen && isNarrow;
 
-  const { setTouchScreenFlag, loadGlobalDictionary } = props;
+  useStyles({ min_width: isTouchScreen ? "auto" : 450 });
+
+  const { setTouchScreenFlag, loadInitAssets } = props;
   const { currentLang, initDataLoaded } = props.UI;
 
   useEffect(() => {
@@ -47,8 +56,8 @@ const App = props => {
   }, [isTouchScreen, isSmartphone, setTouchScreenFlag]);
 
   useEffect(() => {
-    loadGlobalDictionary(currentLang);
-  }, [currentLang, initDataLoaded, loadGlobalDictionary]);
+    loadInitAssets(currentLang);
+  }, [currentLang, initDataLoaded, loadInitAssets]);
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -60,7 +69,7 @@ const App = props => {
 
 App.propTypes = {
   setTouchScreenFlag: PropTypes.func.isRequired,
-  loadGlobalDictionary: PropTypes.func.isRequired,
+  loadInitAssets: PropTypes.func.isRequired,
   UI: PropTypes.object.isRequired
 };
 
@@ -70,7 +79,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapActionsToProps = { setTouchScreenFlag, loadGlobalDictionary };
+const mapActionsToProps = { setTouchScreenFlag, loadInitAssets };
 
 export default connect(
   mapStateToProps,

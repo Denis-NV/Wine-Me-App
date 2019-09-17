@@ -23,8 +23,8 @@ class SearchView extends Component {
     return (
       <div>
         <h2>Search</h2>
-        <br />
         <Link to="/search/wine">Found wine</Link>
+        <p>UNDER CONSTRUCTION</p>
       </div>
     );
   }

@@ -3,32 +3,33 @@ import {
   SET_WINE_COUNTRIES,
   SET_SELECTED_WINE_COUNTRIES,
   SET_FILTERS,
-  SET_COUNTRIES_LOADED,
   SET_FILTERS_LOADED,
   SET_PINNED_FILTERS
 } from "../actions/actionsPicker";
 
+import { SET_INIT_DATA } from "../actions/actionsUI";
+
 // Temp Data
-import stylesData from "../../data/wineStyles";
+// import stylesData from "../../data/wineStyles";
 // import countries from "../../data/wineCountries";
 
 const initialState = {
-  countriesLoaded: false,
   filtersLoaded: false,
-  wineStyles: stylesData,
+  wineStyles: [],
   wineCountries: [],
   wineFilters: [[], [], []],
-  selectedStyle: "",
+  selectedStyle: -1,
   selectedCountries: []
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case SET_COUNTRIES_LOADED:
+    case SET_INIT_DATA: {
       return {
         ...state,
-        countriesLoaded: action.payload
+        wineStyles: action.payload.styles
       };
+    }
     case SET_FILTERS_LOADED:
       return {
         ...state,

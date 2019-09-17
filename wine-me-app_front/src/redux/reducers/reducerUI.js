@@ -3,10 +3,12 @@ import {
   CLEAR_ERRORS,
   SET_DEVICE_FLAGS,
   SET_INIT_DATA,
-  SET_WINE_STYLE_FOCUS
+  SET_WINE_STYLE_FOCUS,
+  TOGGLE_GLOBAL_LOADING
 } from "../actions/actionsUI";
 
 const initialState = {
+  showGlobalLoading: false,
   initDataLoaded: false,
   isTouchScreen: false,
   isSmartphone: false,
@@ -27,7 +29,7 @@ export default function(state = initialState, action) {
     case SET_INIT_DATA:
       return {
         ...state,
-        dict: action.payload,
+        dict: action.payload.dict,
         initDataLoaded: true
       };
     case SET_WINE_STYLE_FOCUS:
@@ -42,6 +44,11 @@ export default function(state = initialState, action) {
     case CLEAR_ERRORS:
       return {
         ...state
+      };
+    case TOGGLE_GLOBAL_LOADING:
+      return {
+        ...state,
+        showGlobalLoading: action.payload
       };
     default:
       return state;

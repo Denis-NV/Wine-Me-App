@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 
 // Redux
@@ -23,6 +23,7 @@ import ArrowIcon from "@material-ui/icons/Navigation";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 // Components
 
@@ -85,65 +86,77 @@ const StyleBrowserHeader = props => {
   };
 
   const handleClose = () => {
-    getWineFilters(selectedStyle, currentLang, selectedCountries);
+    getWineFilters(
+      wineStyles[selectedStyle].id,
+      currentLang,
+      selectedCountries
+    );
   };
 
   const handleBackNav = event => {
     setSelectedWineCountries([]);
-    setWineStyle("");
+    setWineStyle(-1);
     resetWineFilters();
   };
 
   return (
-    <Box
-      bgcolor={theme.customValues.overlayColorSolid}
-      px={2}
-      py={3}
-      boxShadow={1}
-    >
-      <Typography variant="h4" align="center" gutterBottom>
-        {dict[selectedStyleData["nameDicRef"]].toUpperCase()}
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        style={{ paddingLeft: 8, display: "flex", margin: "auto" }}
-        onClick={handleBackNav}
+    <Fragment>
+      <Box
+        bgcolor={theme.customValues.overlayColorSolid}
+        px={2}
+        py={3}
+        boxShadow={1}
       >
-        <ArrowIcon style={{ transform: "rotate(-90deg)", marginRight: 8 }} />
-        {dict["choose_another_style"]}
-      </Button>
-      <FormControl className={classes.formControl}>
-        <InputLabel htmlFor="select-multiple-chip">
-          {dict["select_countries"]}
-        </InputLabel>
-        <Select
-          multiple
-          value={selectedCountries}
-          onChange={handleChange}
-          onClose={handleClose}
-          input={<Input id="select-multiple-chip" />}
-          renderValue={selected => (
-            <div className={classes.chips}>
-              {selected.map(value => (
-                <Chip
-                  key={value}
-                  label={wineCountriesData[value].name}
-                  className={classes.chip}
-                />
-              ))}
-            </div>
-          )}
-          MenuProps={MenuProps(window.innerHeight - 200)}
+        <Typography variant="h4" align="center" gutterBottom>
+          {dict[selectedStyleData["nameDicRef"]].toUpperCase()}
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ paddingLeft: 8, display: "flex", margin: "auto" }}
+          onClick={handleBackNav}
         >
-          {wineCountries.map(country => (
-            <MenuItem key={country.code} value={country.code}>
-              {wineCountriesData[country.code].name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
+          <ArrowIcon style={{ transform: "rotate(-90deg)", marginRight: 8 }} />
+          {dict["choose_another_style"]}
+        </Button>
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="select-multiple-chip">
+            {dict["select_countries"]}
+          </InputLabel>
+          <Select
+            multiple
+            value={selectedCountries}
+            onChange={handleChange}
+            onClose={handleClose}
+            input={<Input id="select-multiple-chip" />}
+            renderValue={selected => (
+              <div className={classes.chips}>
+                {selected.map(value => (
+                  <Chip
+                    key={value}
+                    label={wineCountriesData[value].name}
+                    className={classes.chip}
+                  />
+                ))}
+              </div>
+            )}
+            MenuProps={MenuProps(window.innerHeight - 200)}
+          >
+            {wineCountries.map(country => (
+              <MenuItem key={country.code} value={country.code}>
+                {wineCountriesData[country.code].name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+      {wineCountries.length === 0 && (
+        <LinearProgress
+          color="primary"
+          style={{ marginTop: 0, marginBottom: 0, height: 2 }}
+        />
+      )}
+    </Fragment>
   );
 };
 

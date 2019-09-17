@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 // Components
-import { P_TEN } from "../../util/LorenIpsum";
+// import { P_TEN } from "../../util/LorenIpsum";
 
 // IMPORTS END
 
@@ -24,11 +24,10 @@ class WinesView extends Component {
     return (
       <Fragment>
         <h2>Wines</h2>
-        <br />
         <Link to="/wines/wine">Selected wine</Link>
         <br />
-        <br />
-        {P_TEN}
+        <p>UNDER CONSTRUCTION</p>
+        {/* {P_TEN} */}
       </Fragment>
     );
   }
