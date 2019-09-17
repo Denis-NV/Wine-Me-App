@@ -1,5 +1,7 @@
 # Wine-Me-App
 
+[Development URL](https://wineme.web.app)
+
 This is a proof-of-concept / prototype of an app, designed to help novice wine drinkers picking right wine, when shopping or when dining out. It's vaguely based upon a concept of categorizing wine into 8-9 different styles, suggested, among others, by [Wine Folly](https://winefolly.com/review/everything-you-need-to-know-about-wine-in-9-bottles/) website 
 
 ## Built With
